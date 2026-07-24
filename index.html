@@ -92,9 +92,40 @@
   .mini-btn.dom { background: #a0522d; }
 
   .arrows-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+
+  .comment-toggle {
+    position: fixed; top: 20px; right: 20px; z-index: 2000;
+    background: #1a1a1a; color: #fff; padding: 10px 18px; border-radius: 999px;
+    cursor: pointer; font-size: 13px; font-weight: 600; box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    user-select: none;
+  }
+  .comment-toggle.active { background: #d6336c; }
+  .pin-dot {
+    position: absolute; width: 24px; height: 24px; border-radius: 50%;
+    background: #d6336c; color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; cursor: pointer; transform: translate(-50%, -50%);
+    box-shadow: 0 1px 5px rgba(0,0,0,.35); z-index: 900; border: 2px solid #fff;
+  }
+  .pin-popup {
+    position: absolute; background: #fff; border: 1px solid #ddd; border-radius: 10px;
+    padding: 12px; width: 260px; box-shadow: 0 6px 20px rgba(0,0,0,.2); z-index: 950; font-size: 13px;
+  }
+  .pin-popup input, .pin-popup textarea {
+    width: 100%; font-size: 13px; border: 1px solid #ddd; border-radius: 6px;
+    padding: 6px; margin-top: 6px; font-family: inherit; box-sizing: border-box;
+  }
+  .pin-popup textarea { height: 60px; resize: none; }
+  .pin-popup button {
+    margin-top: 8px; background: #1a1a1a; color: #fff; border: none; border-radius: 6px;
+    padding: 6px 14px; font-size: 12px; cursor: pointer; font-weight: 600;
+  }
+  .pin-popup .pin-meta { color: #999; font-size: 11px; margin-top: 6px; }
+  .pin-popup .pin-close { position: absolute; top: 8px; right: 10px; cursor: pointer; color: #999; font-size: 14px; }
 </style>
 </head>
 <body>
+
+<div class="comment-toggle" id="commentToggle">💬 Комментарии: выкл</div>
 
 <div class="layout" id="layout">
 
@@ -212,7 +243,7 @@
           <div class="push">«Вы записались на анализы» — адрес медцентра, часы работы (живая очередь) — «Как подготовиться?»</div>
           <div class="push empty">нет пуша</div>
           <div class="push">«Результаты анализов задерживаются» — ожидаемая дата готовности — «Написать в поддержку»</div>
-          <div class="push">«Часть анализов готова» — N из M анализов готовы, остальное к [дате] — «Посмотреть результаты»</div>
+          <div class="push">«Часть анализов готова» — N из M анализов готовы, остальное к [дате] — «Посмотреть результаты» <span style="opacity:.7">(индивидуальные даты по каждому анализу — фича в разработке, пока показывается максимальный срок)</span></div>
           <div class="push">«Анализы готовы» — результаты в приложении, можно записаться на консультацию в «Моё здоровье» — «Посмотреть результаты»</div>
           <div class="push">«Вы отменили сдачу анализов» — деньги вернутся на карту в течение 3 рабочих дней — «Записаться снова»</div>
         </div></div>
@@ -236,12 +267,12 @@
         </div></div>
 
         <div class="row"><div class="row-label">ВОЗВРАТ</div><div class="cols">
-          <div class="returns manual">При отмене — автовозврат. При неявке — перенос или отмена (канал уточняется: СП или в приложении)</div>
+          <div class="returns manual">Ответственность на пользователе — сервис только напоминает пушами. У лаборатории нет операционных издержек при переносе (фиксированный график), поэтому перенести визит можно самостоятельно, без согласования со СП</div>
           <div class="returns empty">—</div>
           <div class="returns empty">—</div>
           <div class="returns empty">—</div>
           <div class="returns empty">—</div>
-          <div class="returns full">Деньги не сгорают (держим ли деньги пользователя 30 дней? — уточняется по документам)</div>
+          <div class="returns full">Деньги не сгорают. Юридическое ограничение: держать деньги пользователя дольше 30 дней без оказания услуги нельзя — за 25 дней пуш «срок действия заказа истекает», на 30-й — автовозврат</div>
         </div></div>
 
         <div class="row"><div class="row-label">EMOTIONS</div><div class="cols">
@@ -253,7 +284,7 @@
           <div class="emotion-wrap"><div class="face" style="background:#c25a3e;">?</div><div class="emotion-label">Разоч./нейтр.</div></div>
         </div></div>
 
-        <div class="footnote"><b>Invivo:</b> QR-вход и кнопка поддержки уже на первом статусе.</div>
+        <div class="footnote"><b>Invivo:</b> QR-вход и кнопка поддержки уже на первом статусе.<br><b>Ещё одна ветка отмены (общая для обоих сценариев):</b> согласия (на обработку данных, оферта и т.д.) привязаны к заказу, не к пользователю. Отозвать согласие можно только через поддержку — не самостоятельно. При отзыве СП обязана автоматически отменить заказ и вернуть деньги.</div>
       </div>
     </div>
 
@@ -293,9 +324,9 @@
           <div class="push">«Вы записались на анализы» — адрес и время выезда — «Посмотреть детали»<br>«Сдача анализов перенесена» — при переносе даты/времени<br>«Завтра сдача анализов» — за сутки, с адресом — «Как подготовиться?»<br>«Медсестра в пути» — будет через 30 минут</div>
           <div class="push empty">нет пуша</div>
           <div class="push">«Результаты анализов задерживаются» — ожидаемая дата готовности — «Написать в поддержку»</div>
-          <div class="push">«Часть анализов готова» — N из M анализов готовы, остальное к [дате] — «Посмотреть результаты»</div>
+          <div class="push">«Часть анализов готова» — N из M анализов готовы, остальное к [дате] — «Посмотреть результаты» <span style="opacity:.7">(индивидуальные даты по каждому анализу — фича в разработке, пока показывается максимальный срок)</span></div>
           <div class="push">«Анализы готовы» — результаты в приложении, можно записаться на консультацию в «Моё здоровье» — «Посмотреть результаты»</div>
-          <div class="push">Деньги вернутся — «Вы отменили сдачу анализов», возврат за 3 рабочих дня — «Записаться снова»<br>Деньги не вернутся (отмена &lt;2ч) — та же плашка, но удержана стоимость выезда</div>
+          <div class="push">Деньги вернутся — «Вы отменили сдачу анализов», возврат за 3 рабочих дня — «Записаться снова»<br><span style="opacity:.7">Вариант «деньги не вернутся» (удержание за холостой выезд) пока не в проде — уберут пуш до реального внедрения, тестируется</span></div>
         </div></div>
 
         <div class="row"><div class="row-label">TOUCHPOINTS</div><div class="cols">
@@ -317,7 +348,7 @@
         </div></div>
 
         <div class="row"><div class="row-label">ВОЗВРАТ</div><div class="cols">
-          <div class="returns manual">&gt;2ч авто; &lt;2ч — кейс СП: возврат или удержание до 1500 тг именно при холостом выезде (бригада приехала впустую)</div>
+          <div class="returns manual">&gt;2ч авто; &lt;2ч — кейс СП, ручной возврат (маршрут уже построен). <span style="opacity:.7">Удержание за холостой выезд — в планах, включат только после тестирования; пуш об удержании пока не показываем</span></div>
           <div class="returns empty">—</div>
           <div class="returns empty">—</div>
           <div class="returns empty">—</div>
@@ -334,7 +365,7 @@
           <div class="emotion-wrap"><div class="face" style="background:#c25a3e;">?</div><div class="emotion-label">Разоч./нейтр.</div></div>
         </div></div>
 
-        <div class="footnote">Перенос &lt;1ч до приёма — блок без права переноса.</div>
+        <div class="footnote">Перенос &lt;1ч до приёма — блок без права переноса.<br><b style="color:#a0522d;">⚠ Риск для релиза:</b> сценарий может не войти в первую версию — есть проблемы с актуальными слотами InVivo, уточняется в понедельник.</div>
       </div>
     </div>
 
@@ -403,6 +434,132 @@
           async>
   </script>
 </div>
+
+<script>
+  const GAS_URL = "https://script.google.com/macros/s/AKfycbw7sTTzzqHYfXKmw4Rp2HLv-GD3j-rDq5R_V6U9aZHeRw5MlHsXQTDwFturPMPc2iMl_w/exec";
+  const layoutEl = document.getElementById('layout');
+  let commentMode = false;
+  let savedAuthor = localStorage.getItem('cjm_comment_author') || '';
+
+  const toggleBtn = document.getElementById('commentToggle');
+  toggleBtn.addEventListener('click', function () {
+    commentMode = !commentMode;
+    toggleBtn.textContent = commentMode ? '💬 Комментарии: вкл — кликните по холсту' : '💬 Комментарии: выкл';
+    toggleBtn.classList.toggle('active', commentMode);
+    closePopup();
+  });
+
+  layoutEl.addEventListener('click', function (e) {
+    if (!commentMode) return;
+    if (e.target.closest('.pin-dot') || e.target.closest('.pin-popup')) return;
+    const rect = layoutEl.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    showNewPinForm(x, y);
+  });
+
+  function showNewPinForm(x, y) {
+    closePopup();
+    const popup = document.createElement('div');
+    popup.className = 'pin-popup';
+    popup.style.left = x + 12 + 'px';
+    popup.style.top = y + 12 + 'px';
+    popup.innerHTML =
+      '<span class="pin-close">✕</span>' +
+      '<div style="font-weight:700;">Новый комментарий</div>' +
+      '<input type="text" placeholder="Ваше имя" id="pinAuthor" value="' + escapeAttr(savedAuthor) + '">' +
+      '<textarea placeholder="Что здесь не так или что нужно поправить?" id="pinText"></textarea>' +
+      '<button id="pinSubmit">Отправить</button>';
+    layoutEl.appendChild(popup);
+    popup.querySelector('.pin-close').onclick = closePopup;
+    document.getElementById('pinSubmit').onclick = async function () {
+      const text = document.getElementById('pinText').value.trim();
+      const author = document.getElementById('pinAuthor').value.trim() || 'Гость';
+      if (!text) return;
+      savedAuthor = author;
+      localStorage.setItem('cjm_comment_author', author);
+      await savePin(x, y, text, author);
+      popup.remove();
+      loadPins();
+    };
+  }
+
+  async function savePin(x, y, text, author) {
+    const w = layoutEl.scrollWidth, h = layoutEl.scrollHeight;
+    try {
+      await fetch(GAS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ x: x / w, y: y / h, target: '', text: text, author: author })
+      });
+    } catch (err) {
+      alert('Не удалось сохранить комментарий, попробуйте ещё раз');
+    }
+  }
+
+  function loadPins() {
+    const cbName = 'cjmPinsCallback_' + Date.now();
+    window[cbName] = function (pins) {
+      renderPins(pins);
+      delete window[cbName];
+      script.remove();
+    };
+    const script = document.createElement('script');
+    script.src = GAS_URL + '?callback=' + cbName;
+    script.onerror = function () { console.error('Не удалось загрузить комментарии'); };
+    document.body.appendChild(script);
+  }
+
+  function renderPins(pins) {
+    document.querySelectorAll('.pin-dot').forEach(function (p) { p.remove(); });
+    const w = layoutEl.scrollWidth, h = layoutEl.scrollHeight;
+    pins.forEach(function (p, i) {
+      const dot = document.createElement('div');
+      dot.className = 'pin-dot';
+      dot.style.left = (parseFloat(p.x) * w) + 'px';
+      dot.style.top = (parseFloat(p.y) * h) + 'px';
+      dot.textContent = i + 1;
+      dot.onclick = function (ev) {
+        ev.stopPropagation();
+        showPinInfo(dot, p);
+      };
+      layoutEl.appendChild(dot);
+    });
+  }
+
+  function showPinInfo(dot, p) {
+    closePopup();
+    const popup = document.createElement('div');
+    popup.className = 'pin-popup';
+    popup.style.left = (parseFloat(dot.style.left) + 14) + 'px';
+    popup.style.top = (parseFloat(dot.style.top) + 4) + 'px';
+    let dateStr = '';
+    try { dateStr = new Date(p.timestamp).toLocaleString('ru-RU'); } catch (e) {}
+    popup.innerHTML =
+      '<span class="pin-close">✕</span>' +
+      '<div style="font-weight:700;">' + escapeHtml(p.author) + '</div>' +
+      '<div style="margin-top:4px;">' + escapeHtml(p.text) + '</div>' +
+      '<div class="pin-meta">' + dateStr + '</div>';
+    layoutEl.appendChild(popup);
+    popup.querySelector('.pin-close').onclick = closePopup;
+  }
+
+  function closePopup() {
+    document.querySelectorAll('.pin-popup').forEach(function (p) { p.remove(); });
+  }
+
+  function escapeHtml(s) {
+    const d = document.createElement('div');
+    d.innerText = s == null ? '' : s;
+    return d.innerHTML;
+  }
+  function escapeAttr(s) {
+    return (s || '').replace(/"/g, '&quot;');
+  }
+
+  window.addEventListener('load', loadPins);
+</script>
 
 </body>
 </html>
