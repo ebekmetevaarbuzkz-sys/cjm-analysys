@@ -211,6 +211,7 @@
       <div class="label blue">Медцентр</div>
       <div class="card sc-medcenter" id="med-card">
         <div class="header"><h1>Customer Journey Map —</h1><div class="sub">Сценарий «медцентр»</div></div>
+        <div style="font-size:11px; color:#999; font-style:italic; margin:-10px 0 14px;">Все тексты пушей ниже — черновики, финально не утверждены (правки формулировок и юр. согласование сроков ещё в работе)</div>
 
         <div class="row stage-row"><div class="row-label">STAGE</div><div class="cols">
           <div class="stage">Ожидаем вас в медцентре</div>
@@ -243,7 +244,7 @@
           <div class="push">«Вы записались на анализы» — адрес медцентра, часы работы (живая очередь) — «Как подготовиться?»</div>
           <div class="push empty">нет пуша</div>
           <div class="push">«Результаты анализов задерживаются» — ожидаемая дата готовности — «Написать в поддержку»</div>
-          <div class="push">«Часть анализов готова» — N из M анализов готовы — «Посмотреть результаты» <span style="opacity:.7">(убрали «остальное к [дате]» — данные о сроках заполнены у InVivo лишь на ~50%, у партнёров хуже (~30%); индивидуальные даты — на будущее, сейчас ориентируем на общий срок при оформлении заказа)</span></div>
+          <div class="push">«Часть анализов готова» — N из M анализов готовы — «Посмотреть результаты» <span style="opacity:.7">(убрали «остальное к [дате]» — данные о сроках заполнены у InVivo лишь на ~50%, у партнёров хуже (~30%); формулировка «N из M» vs «все готовы» пока не проработана в макете — Аня берёт в доработку)</span></div>
           <div class="push">«Анализы готовы» — результаты в приложении — «Посмотреть результаты» <span style="opacity:.7">(отдельным пушем, идёт после: предложение записаться на консультацию в «Моё здоровье» — формулировки не должны путать эти два действия)</span></div>
           <div class="push">«Вы отменили сдачу анализов» — деньги вернутся на карту в течение 3 рабочих дней — «Записаться снова»</div>
         </div></div>
@@ -272,8 +273,26 @@
           <div class="returns empty">—</div>
           <div class="returns empty">—</div>
           <div class="returns empty">—</div>
-          <div class="returns full">Деньги не сгорают. Юридическое ограничение: держать деньги без оказания услуги долго нельзя (риски как у финансовой деятельности) — на 25-й день пуш «Через 5 дней будет оформлен автовозврат», на 30-й — автовозврат + уведомление</div>
+          <div class="returns full">Деньги не сгорают. Юридическое ограничение: держать деньги без оказания услуги долго нельзя (риски как у финансовой деятельности) — на 25-й день пуш-черновик «Увы, срок действия вашего заказа истекает, через 5 дней будет оформлен возврат», на 30-й — «Возврат выполнен, если хотите — запишитесь снова». <span style="opacity:.7">Текст не утверждён финально — ждём точных сроков от юристов</span></div>
         </div></div>
+
+      <div class="row"><div class="row-label">ВЕТКИ<br>ОТМЕНЫ</div><div class="cols cols-4" style="grid-column: span 6; grid-template-columns: repeat(3, 1fr);">
+        <div>
+          <div class="returns note" style="text-align:center;">Пользователь отменяет сам</div>
+          <div style="text-align:center; font-size:13px; color:#999; margin:2px 0;">↓</div>
+          <div class="returns full" style="text-align:center;">Автовозврат, без СП</div>
+        </div>
+        <div>
+          <div class="returns note" style="text-align:center;">Отзыв согласия <span style="opacity:.7">(данные, оферта)</span></div>
+          <div style="text-align:center; font-size:13px; color:#999; margin:2px 0;">↓</div>
+          <div class="returns manual" style="text-align:center;">Только через СП → автоотмена + возврат</div>
+        </div>
+        <div>
+          <div class="returns note" style="text-align:center;">Бездействие <span style="opacity:.7">(без даты сдачи)</span></div>
+          <div style="text-align:center; font-size:13px; color:#999; margin:2px 0;">↓</div>
+          <div class="returns manual" style="text-align:center;">25 дн. — пуш; 30 дн. — автовозврат</div>
+        </div>
+      </div></div>
 
         <div class="row"><div class="row-label">EMOTIONS</div><div class="cols">
           <div class="emotion-wrap"><div class="face" style="background:#4a90c2;">~</div><div class="emotion-label">Спокоен</div></div>
@@ -284,7 +303,7 @@
           <div class="emotion-wrap"><div class="face" style="background:#c25a3e;">?</div><div class="emotion-label">Разоч./нейтр.</div></div>
         </div></div>
 
-        <div class="footnote"><b>Invivo:</b> QR-вход и кнопка поддержки уже на первом статусе.<br><b>Ещё одна ветка отмены (общая для обоих сценариев):</b> согласия (на обработку данных, оферта и т.д.) привязаны к заказу, не к пользователю. Отозвать согласие можно только через поддержку — не самостоятельно. При отзыве СП обязана автоматически отменить заказ и вернуть деньги. <span style="opacity:.7">Реальный кейс-предупреждение: клиент отозвал согласие в приложении, но всё равно пришёл сдавать анализы без него — привело к проблемам, автоматически это не отследили.</span> Открытый вопрос: видит ли InVivo перенос/отмену заказа автоматически, или нужно уведомлять вручную/по почте.</div>
+      <div class="footnote"><b>Invivo:</b> QR-вход и кнопка поддержки уже на первом статусе.<br><span style="opacity:.7">Реальный кейс-предупреждение: клиент отозвал согласие в приложении, но всё равно пришёл сдавать анализы без него — привело к проблемам, автоматически это не отследили.</span> Открытый вопрос: видит ли InVivo перенос/отмену заказа автоматически, или нужно уведомлять вручную/по почте.<br><b>Причина отмены разделяется</b> для аналитики: пользователь / оператор (с комментарием) / клиника — выбор из списка + «другое». «Перенести» — отдельная кнопка от «Отменить».</div>
       </div>
     </div>
 
@@ -292,6 +311,7 @@
       <div class="label" style="color:#a0522d;">На дому</div>
       <div class="card sc-domu" id="dom-card">
         <div class="header"><h1>Customer Journey Map —</h1><div class="sub">Сценарий «выезд на дом»</div></div>
+        <div style="font-size:11px; color:#999; font-style:italic; margin:-10px 0 14px;">Все тексты пушей ниже — черновики, финально не утверждены (правки формулировок и юр. согласование сроков ещё в работе)</div>
 
         <div class="row stage-row"><div class="row-label">STAGE</div><div class="cols">
           <div class="stage">Ожидайте забора анализов</div>
@@ -321,10 +341,10 @@
         </div></div>
 
         <div class="row"><div class="row-label">PUSH</div><div class="cols">
-          <div class="push">«Вы записались на анализы» — адрес и время выезда — «Посмотреть детали»<br>«Сдача анализов перенесена» — при переносе даты/времени<br>«Завтра сдача анализов» — за сутки, с адресом — «Как подготовиться?»<br>Перед выездом — push «Готовы ли вы?» с кнопками [Да]/[Нет]<br>«Медсестра в пути» — будет через 30 минут<br><span style="opacity:.7">Решено: пока только через пуши, без WhatsApp-бота (как у конкурентов Arbuz/iDoctor) — добавят WhatsApp только если увидят частое игнорирование пушей</span></div>
+          <div class="push"><s style="color:#c25a3e;">«Вы записались на анализы»</s> → «Вы заказали анализы на дом» <span style="opacity:.7">(Аня: «записались» некорректно для выезда, поправить)</span> — адрес и время выезда — «Посмотреть детали»<br>«Сдача анализов перенесена» — при переносе даты/времени<br>«Завтра сдача анализов» — за сутки, с адресом — «Как подготовиться?»<br>Перед выездом — push «Готовы ли вы?» с кнопками [Да]/[Нет]<br>«Медсестра в пути» — будет через 30 минут<br><span style="opacity:.7">Решено: пока только через пуши, без WhatsApp-бота (как у конкурентов Arbuz/iDoctor) — добавят WhatsApp только если увидят частое игнорирование пушей. Также в доработке: формулировки «вы вызвали» / «анализ надо» — переформулировать (задача Жени)</span></div>
           <div class="push empty">нет пуша</div>
           <div class="push">«Результаты анализов задерживаются» — ожидаемая дата готовности — «Написать в поддержку»</div>
-          <div class="push">«Часть анализов готова» — N из M анализов готовы — «Посмотреть результаты» <span style="opacity:.7">(убрали «остальное к [дате]» — данные о сроках заполнены у InVivo лишь на ~50%, у партнёров хуже (~30%); индивидуальные даты — на будущее, сейчас ориентируем на общий срок при оформлении заказа)</span></div>
+          <div class="push">«Часть анализов готова» — N из M анализов готовы — «Посмотреть результаты» <span style="opacity:.7">(убрали «остальное к [дате]» — данные о сроках заполнены у InVivo лишь на ~50%, у партнёров хуже (~30%); формулировка «N из M» vs «все готовы» пока не проработана в макете — Аня берёт в доработку)</span></div>
           <div class="push">«Анализы готовы» — результаты в приложении — «Посмотреть результаты» <span style="opacity:.7">(отдельным пушем, идёт после: предложение записаться на консультацию в «Моё здоровье» — формулировки не должны путать эти два действия)</span></div>
           <div class="push">Деньги вернутся — «Вы отменили сдачу анализов», возврат за 3 рабочих дня — «Записаться снова»<br><span style="opacity:.7">Вариант «деньги не вернутся» (удержание за холостой выезд) пока не в проде — уберут пуш до реального внедрения, тестируется</span></div>
         </div></div>
@@ -348,13 +368,36 @@
         </div></div>
 
         <div class="row"><div class="row-label">ВОЗВРАТ</div><div class="cols">
-          <div class="returns manual">&gt;2ч авто; &lt;2ч — кейс СП, ручной возврат (маршрут уже построен). <span style="opacity:.7">Удержание за холостой выезд — в планах, включат только после тестирования; пуш об удержании пока не показываем</span></div>
+          <div class="returns manual">&gt;2ч авто; &lt;2ч — кейс СП, ручной возврат (маршрут уже построен). <span style="opacity:.7">Решено: пуш про удержание за холостой выезд не делаем вообще — ни «удержали», ни «не удержали» (оба варианта рискуют дать плохой опыт). Добавят, когда появится реальная логика штрафов. Юля дала фидбэк банку убрать эту плашку из макета</span></div>
           <div class="returns empty">—</div>
           <div class="returns empty">—</div>
           <div class="returns empty">—</div>
           <div class="returns empty">—</div>
           <div class="returns full">Итог — из кейса СП или полный возврат</div>
         </div></div>
+
+      <div class="row"><div class="row-label">ВЕТКИ<br>ОТМЕНЫ</div><div class="cols" style="grid-template-columns: repeat(4, 1fr);">
+        <div>
+          <div class="returns note" style="text-align:center;">Отмена сама &gt;2ч до слота</div>
+          <div style="text-align:center; font-size:13px; color:#999; margin:2px 0;">↓</div>
+          <div class="returns full" style="text-align:center;">Автовозврат, без СП</div>
+        </div>
+        <div>
+          <div class="returns note" style="text-align:center;">Отмена &lt;2ч до выезда</div>
+          <div style="text-align:center; font-size:13px; color:#999; margin:2px 0;">↓</div>
+          <div class="returns manual" style="text-align:center;">Ручной кейс СП, возврат (маршрут уже построен)</div>
+        </div>
+        <div>
+          <div class="returns note" style="text-align:center;">Медсестра на месте, анализ не взят <span style="opacity:.7">(холостой выезд)</span></div>
+          <div style="text-align:center; font-size:13px; color:#999; margin:2px 0;">↓</div>
+          <div class="returns manual" style="text-align:center;">Автовозврат; удержание — в планах, не в проде</div>
+        </div>
+        <div>
+          <div class="returns note" style="text-align:center;">Отзыв согласия <span style="opacity:.7">(данные, оферта)</span></div>
+          <div style="text-align:center; font-size:13px; color:#999; margin:2px 0;">↓</div>
+          <div class="returns manual" style="text-align:center;">Только через СП → автоотмена + возврат</div>
+        </div>
+      </div></div>
 
         <div class="row"><div class="row-label">EMOTIONS</div><div class="cols">
           <div class="emotion-wrap"><div class="face" style="background:#c58a2e;">!</div><div class="emotion-label">Собран</div></div>
@@ -365,7 +408,7 @@
           <div class="emotion-wrap"><div class="face" style="background:#c25a3e;">?</div><div class="emotion-label">Разоч./нейтр.</div></div>
         </div></div>
 
-        <div class="footnote">Перенос &lt;1ч до приёма — блок без права переноса.<br><b style="color:#a0522d;">⚠ Решено:</b> в первый релиз сценарий не входит — у InVivo техническая проблема с актуальными слотами на выезд. Добавят отдельным этапом позже, когда решат на своей стороне.</div>
+      <div class="footnote">Перенос &lt;1ч до приёма — блок без права переноса.<br><b style="color:#a0522d;">⚠ Решено:</b> в первый релиз сценарий не входит — у InVivo техническая проблема с актуальными слотами на выезд. Добавят отдельным этапом позже.<br><span style="opacity:.7">InVivo звонит перед выездом, чтобы снизить число холостых выездов — они всё равно будут происходить; СП подключается только если пользователь проигнорировал все пуши.</span> Причина отмены разделяется для аналитики (пользователь/оператор/клиника). «Перенести» — отдельная кнопка от «Отменить».</div>
       </div>
     </div>
 
@@ -380,42 +423,6 @@
     <path id="path-med" fill="none" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrHead)"/>
     <path id="path-dom" fill="none" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrHead)"/>
   </svg>
-</div>
-
-<!-- ===================== ОТМЕНА И ВОЗВРАТ — ВСЕ ВЕТКИ ===================== -->
-<div style="width:1900px; margin: 70px auto 0;">
-  <div class="label">Отмена и возврат — все ветки</div>
-  <div class="card" style="padding: 30px 40px;">
-    <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
-
-      <div style="text-align:center; font-size:12px; font-weight:700; color:#6b6b66; margin-bottom:6px; grid-column: span 5;">ТРИГГЕР</div>
-
-      <div class="returns note" style="text-align:center; padding:14px 10px;">Пользователь отменяет сам<br><span style="opacity:.7">медцентр — всегда; выезд — &gt;2ч до слота</span></div>
-      <div class="returns note" style="text-align:center; padding:14px 10px;">Пользователь отменяет<br>&lt;2ч до выезда</div>
-      <div class="returns note" style="text-align:center; padding:14px 10px;">Медсестра на месте, анализ не взят<br><span style="opacity:.7">холостой выезд</span></div>
-      <div class="returns note" style="text-align:center; padding:14px 10px;">Отзыв согласия<br><span style="opacity:.7">на обработку данных, оферту и т.д.</span></div>
-      <div class="returns note" style="text-align:center; padding:14px 10px;">Бездействие<br><span style="opacity:.7">заказ без даты сдачи</span></div>
-
-      <div style="grid-column: span 5; display:flex; justify-content:space-around; padding: 4px 0;">
-        <div style="font-size:16px; color:#999;">↓</div>
-        <div style="font-size:16px; color:#999;">↓</div>
-        <div style="font-size:16px; color:#999;">↓</div>
-        <div style="font-size:16px; color:#999;">↓</div>
-        <div style="font-size:16px; color:#999;">↓</div>
-      </div>
-
-      <div class="returns full" style="text-align:center; padding:14px 10px;">Автовозврат<br><span style="opacity:.7">без участия СП</span></div>
-      <div class="returns manual" style="text-align:center; padding:14px 10px;">Ручной кейс СП<br>возврат (маршрут уже построен)</div>
-      <div class="returns manual" style="text-align:center; padding:14px 10px;">Автовозврат<br><span style="opacity:.7">удержание за холостой выезд — в планах, пока не в проде</span></div>
-      <div class="returns manual" style="text-align:center; padding:14px 10px;">Только через СП<br>СП автоматически отменяет заказ + возврат</div>
-      <div class="returns manual" style="text-align:center; padding:14px 10px;">25 дней — пуш-предупреждение<br>30 дней — автовозврат</div>
-
-    </div>
-    <div class="footnote">
-      Отдельно: InVivo звонит перед выездом, чтобы уточнить готовность и снизить число холостых выездов — но они всё равно будут происходить. СП подключается только если пользователь проигнорировал все пуши.<br>
-      <b>Причина отмены теперь разделяется</b> для аналитики: отменил пользователь / отменил оператор (с комментарием) / отменила клиника. При отмене пользователь выбирает причину из выпадающего списка + вариант «другое». Кнопка «Перенести» — отдельная от «Отменить», это не одно и то же действие.
-    </div>
-  </div>
 </div>
 
 <script>
