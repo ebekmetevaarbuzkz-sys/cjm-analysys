@@ -483,21 +483,41 @@
     popup.innerHTML =
       '<span class="pin-close">✕</span>' +
       '<div style="font-weight:700;">Новый комментарий</div>' +
-      '<input type="text" placeholder="Ваше имя" id="pinAuthor" value="' + escapeAttr(savedAuthor) + '">' +
-      '<textarea placeholder="Что здесь не так или что нужно поправить?" id="pinText"></textarea>' +
-      '<button id="pinSubmit">Отправить</button>';
+      '<input type="text" placeholder="Ваше имя" class="pinAuthor" value="' + escapeAttr(savedAuthor) + '">' +
+      '<textarea placeholder="Что здесь не так или что нужно поправить?" class="pinText"></textarea>' +
+      '<button type="button" class="pinSubmit">Отправить</button>' +
+      '<div class="pin-status" style="display:none; margin-top:6px; font-size:12px; color:#2e7d5b; font-weight:600;">Комментарий добавлен ✓</div>';
     layoutEl.appendChild(popup);
-    popup.querySelector('.pin-close').onclick = closePopup;
-    document.getElementById('pinSubmit').onclick = async function () {
-      const text = document.getElementById('pinText').value.trim();
-      const author = document.getElementById('pinAuthor').value.trim() || 'Гость';
-      if (!text) return;
+
+    const closeBtn = popup.querySelector('.pin-close');
+    const authorInput = popup.querySelector('.pinAuthor');
+    const textArea = popup.querySelector('.pinText');
+    const submitBtn = popup.querySelector('.pinSubmit');
+    const statusEl = popup.querySelector('.pin-status');
+
+    closeBtn.addEventListener('click', function (ev) { ev.stopPropagation(); closePopup(); });
+
+    submitBtn.addEventListener('click', async function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const text = textArea.value.trim();
+      const author = authorInput.value.trim() || 'Гость';
+      if (!text) { textArea.focus(); return; }
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Отправка...';
       savedAuthor = author;
       localStorage.setItem('cjm_comment_author', author);
-      await savePin(x, y, text, author);
-      popup.remove();
-      loadPins();
-    };
+      try {
+        await savePin(x, y, text, author);
+        statusEl.style.display = 'block';
+        submitBtn.style.display = 'none';
+        setTimeout(function () { popup.remove(); loadPins(); }, 900);
+      } catch (err) {
+        alert('Не удалось сохранить комментарий: ' + err.message);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Отправить';
+      }
+    });
   }
 
   async function savePin(x, y, text, author) {
@@ -531,6 +551,33 @@
     });
   }
 
+  async function deletePin(id) {
+    return new Promise(function (resolve) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = GAS_URL;
+      form.target = 'hiddenPostFrame';
+      form.style.display = 'none';
+
+      function addField(name, value) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      }
+      addField('action', 'delete');
+      addField('id', id);
+
+      document.body.appendChild(form);
+      form.submit();
+      setTimeout(function () {
+        form.remove();
+        resolve();
+      }, 900);
+    });
+  }
+
   function loadPins() {
     const cbName = 'cjmPinsCallback_' + Date.now();
     window[cbName] = function (pins) {
@@ -553,10 +600,10 @@
       dot.style.left = (parseFloat(p.x) * w) + 'px';
       dot.style.top = (parseFloat(p.y) * h) + 'px';
       dot.textContent = i + 1;
-      dot.onclick = function (ev) {
+      dot.addEventListener('click', function (ev) {
         ev.stopPropagation();
         showPinInfo(dot, p);
-      };
+      });
       layoutEl.appendChild(dot);
     });
   }
@@ -573,9 +620,35 @@
       '<span class="pin-close">✕</span>' +
       '<div style="font-weight:700;">' + escapeHtml(p.author) + '</div>' +
       '<div style="margin-top:4px;">' + escapeHtml(p.text) + '</div>' +
-      '<div class="pin-meta">' + dateStr + '</div>';
+      '<div class="pin-meta">' + dateStr + '</div>' +
+      '<button type="button" class="pinDelete" style="background:#c0392b; margin-top:8px;">Удалить</button>' +
+      '<div class="pin-status" style="display:none; margin-top:6px; font-size:12px; color:#999;">Удалено</div>';
     layoutEl.appendChild(popup);
-    popup.querySelector('.pin-close').onclick = closePopup;
+
+    const closeBtn = popup.querySelector('.pin-close');
+    const deleteBtn = popup.querySelector('.pinDelete');
+    const statusEl = popup.querySelector('.pin-status');
+
+    closeBtn.addEventListener('click', function (ev) { ev.stopPropagation(); closePopup(); });
+
+    deleteBtn.addEventListener('click', async function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (!confirm('Удалить этот комментарий?')) return;
+      deleteBtn.disabled = true;
+      deleteBtn.textContent = 'Удаление...';
+      try {
+        await deletePin(p.id);
+        statusEl.style.display = 'block';
+        deleteBtn.style.display = 'none';
+        dot.remove();
+        setTimeout(function () { popup.remove(); loadPins(); }, 700);
+      } catch (err) {
+        alert('Не удалось удалить: ' + err.message);
+        deleteBtn.disabled = false;
+        deleteBtn.textContent = 'Удалить';
+      }
+    });
   }
 
   function closePopup() {
