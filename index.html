@@ -126,6 +126,7 @@
 <body>
 
 <div class="comment-toggle" id="commentToggle">💬 Комментарии: выкл</div>
+<iframe name="hiddenPostFrame" style="display:none;"></iframe>
 
 <div class="layout" id="layout">
 
@@ -450,24 +451,6 @@
   window.addEventListener('resize', draw);
 </script>
 
-<div style="width:1900px; margin: 40px auto 0; padding: 0 40px 60px;">
-  <script src="https://giscus.app/client.js"
-          data-repo="ebekmetevaarbuzkz-sys/cjm-analysys"
-          data-repo-id="R_kgDOTiCMPQ"
-          data-category="Announcements"
-          data-category-id="DIC_kwDOTiCMPc4DB22b"
-          data-mapping="pathname"
-          data-strict="0"
-          data-reactions-enabled="1"
-          data-emit-metadata="0"
-          data-input-position="bottom"
-          data-theme="preferred_color_scheme"
-          data-lang="ru"
-          crossorigin="anonymous"
-          async>
-  </script>
-</div>
-
 <script>
   const GAS_URL = "https://script.google.com/macros/s/AKfycbw7sTTzzqHYfXKmw4Rp2HLv-GD3j-rDq5R_V6U9aZHeRw5MlHsXQTDwFturPMPc2iMl_w/exec";
   const layoutEl = document.getElementById('layout');
@@ -519,16 +502,33 @@
 
   async function savePin(x, y, text, author) {
     const w = layoutEl.scrollWidth, h = layoutEl.scrollHeight;
-    try {
-      await fetch(GAS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify({ x: x / w, y: y / h, target: '', text: text, author: author })
-      });
-    } catch (err) {
-      alert('Не удалось сохранить комментарий, попробуйте ещё раз');
-    }
+    return new Promise(function (resolve) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = GAS_URL;
+      form.target = 'hiddenPostFrame';
+      form.style.display = 'none';
+
+      function addField(name, value) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        form.appendChild(input);
+      }
+      addField('x', x / w);
+      addField('y', y / h);
+      addField('target', '');
+      addField('text', text);
+      addField('author', author);
+
+      document.body.appendChild(form);
+      form.submit();
+      setTimeout(function () {
+        form.remove();
+        resolve();
+      }, 900);
+    });
   }
 
   function loadPins() {
