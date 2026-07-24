@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>CJM Анализы — компоновка как в референсе</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #e5e5e0;
+    color: #1a1a1a;
+    margin: 0;
+    padding: 60px;
+  }
+  .layout { position: relative; display: flex; gap: 60px; align-items: center; }
+  .col-left { width: 780px; flex-shrink: 0; }
+  .col-mid { width: 200px; flex-shrink: 0; }
+  .col-right { width: 1080px; flex-shrink: 0; display: flex; flex-direction: column; gap: 60px; }
+  .label { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 12px; }
+  .label.blue { color: #3a5ba0; }
+
+  .card { background: #fff; border-radius: 12px; padding: 26px 30px; }
+
+  .header { display: flex; align-items: baseline; gap: 8px; border-bottom: 1px solid #e5e5e0; padding-bottom: 14px; margin-bottom: 18px; }
+  .header h1 { font-size: 15px; font-weight: 700; margin: 0; }
+  .header .sub { font-size: 14px; font-weight: 600; }
+
+  .row-label { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: #6b6b66; width: 90px; flex-shrink: 0; padding-top: 3px; }
+  .row { display: flex; border-bottom: 1px solid #eeeeE8; padding: 11px 0; }
+  .row:last-child { border-bottom: none; }
+  .cols { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; flex: 1; }
+  .cols.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  .stage-row .cols { gap: 0; }
+  .stage {
+    color: #fff; font-weight: 600; font-size: 10.5px; text-align: center;
+    padding: 8px 12px 8px 20px;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%, 11px 50%);
+    margin-left: -11px; line-height: 1.2;
+  }
+  .stage:first-child { margin-left: 0; clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 50%, calc(100% - 12px) 100%, 0 100%); padding-left: 12px;}
+  .steps { font-size: 9px; line-height: 1.4; color: #2a2a2a; }
+  .steps li { margin-bottom: 2px; }
+  .steps ul { margin: 0; padding-left: 11px; }
+  .thought { font-family: Georgia, serif; font-style: italic; font-size: 9px; color: #444; line-height: 1.4; padding-left: 6px; border-left: 2px solid #d8d5c9; }
+  .push { font-size: 8.5px; line-height: 1.4; color: #1c4d85; background: #eef4fb; border-radius: 6px; padding: 6px 7px; }
+  .push.empty { background: transparent; color: #b3b3ab; font-style: italic; padding: 6px 0; }
+  .touchpoints { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tp { font-size: 8px; font-weight: 600; padding: 2px 6px; border-radius: 999px; white-space: nowrap; }
+  .tp-app { background: #e6ecf7; color: #2c4a8c; }
+  .tp-qr { background: #f2e6dd; color: #7a3d1a; }
+  .tp-wa { background: #e5f7e9; color: #1e7a34; }
+  .tp-pay { background: #f2e6dd; color: #7a3d1a; }
+  .tp-support { background: #fdf1d8; color: #93650b; }
+  .actors { display: flex; flex-direction: column; gap: 4px; font-size: 8.5px; color: #333; }
+  .actor { display: flex; align-items: center; gap: 4px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .returns { font-size: 8.5px; line-height: 1.4; padding: 6px 7px; border-radius: 6px; }
+  .returns.full { background: #e3f0ea; color: #1f5c42; }
+  .returns.manual { background: #fdf1d8; color: #93650b; }
+  .returns.note { background: #eef4fb; color: #1c4d85; }
+  .returns.empty { background: transparent; color: #b3b3ab; font-style: italic; padding: 6px 0; }
+  .emotion-wrap { padding-top: 6px; }
+  .emotion-label { text-align: center; font-size: 8.5px; font-weight: 600; margin-top: 4px; }
+  .face { width: 19px; height: 19px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 10px; color: #fff; font-weight: 700; }
+  .footnote { margin-top: 14px; font-size: 9px; color: #444; border-top: 1px solid #eeeeE8; padding-top: 10px; line-height: 1.4; }
+  .footnote b { color: #1a1a1a; }
+
+  .sc-voronka .stage { background: #3a5ba0; }
+  .sc-voronka .stage.fork { background: #6b7fd7; }
+  .sc-voronka .header .sub { color: #3a5ba0; }
+  .sc-voronka .dot-user { background: #3a5ba0; }
+
+  .sc-medcenter .stage { background: #2e7d5b; }
+  .sc-medcenter .stage.history { background: #8a8a82; }
+  .sc-medcenter .header .sub { color: #2e7d5b; }
+  .sc-medcenter .dot-user { background: #2e7d5b; }
+
+  .sc-domu .stage { background: #a0522d; }
+  .sc-domu .stage.history { background: #8a8a82; }
+  .sc-domu .header .sub { color: #a0522d; }
+  .sc-domu .dot-user { background: #a0522d; }
+
+  .dot-support { background: #d97706; }
+  .dot-lab { background: #6b7fd7; }
+  .dot-brigade { background: #2e7d5b; }
+
+  .mini-fork { display: flex; flex-direction: column; align-items: center; }
+  .mini-node { background: #6b7fd7; color: #fff; font-size: 11px; font-weight: 600; text-align: center; padding: 8px; border-radius: 8px; width: 160px; margin-bottom: 40px; }
+  .mini-branch-row { display: flex; flex-direction: column; gap: 140px; align-items: center; }
+  .mini-btn { font-size: 10.5px; font-weight: 600; color: #fff; text-align: center; padding: 8px 14px; border-radius: 8px; width: 140px; }
+  .mini-btn.med { background: #2e7d5b; }
+  .mini-btn.dom { background: #a0522d; }
+
+  .arrows-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+</style>
+</head>
+<body>
+
+<div class="layout" id="layout">
+
+  <!-- ===================== ЛЕВЫЙ СТОЛБЕЦ: ОБЩИЙ ===================== -->
+  <div class="col-left">
+    <div class="label">Общий</div>
+    <div class="card sc-voronka" id="general-card">
+      <div class="header"><h1>Customer Journey Map —</h1><div class="sub">Общая воронка</div></div>
+
+      <div class="row stage-row"><div class="row-label">STAGE</div><div class="cols cols-4">
+        <div class="stage">Осознал потребность</div>
+        <div class="stage">Выбор анализов (корзина)</div>
+        <div class="stage">Оплата</div>
+        <div class="stage fork">Отслеживание статуса</div>
+      </div></div>
+
+      <div class="row"><div class="row-label">STEPS</div><div class="cols cols-4">
+        <div class="steps"><ul><li>Симптом / направление / профилактика</li><li>Открывает раздел «Анализы»</li></ul></div>
+        <div class="steps"><ul><li>Добавляет в корзину</li><li>Выбирает способ получения</li><li>Лаборатория, дата, время</li></ul></div>
+        <div class="steps"><ul><li>Проверяет сумму</li><li>Способ оплаты</li><li>Подтверждает заказ</li></ul></div>
+        <div class="steps"><ul><li>Заказ в «Мои анализы»</li><li>Статус меняется</li></ul></div>
+      </div></div>
+
+      <div class="row"><div class="row-label">THOUGHTS</div><div class="cols cols-4">
+        <div class="thought">«Пора бы сдать анализы»</div>
+        <div class="thought">«Приехать самому или чтобы приехали?»</div>
+        <div class="thought">«Надеюсь, оплата пройдёт быстро»</div>
+        <div class="thought">«На каком этапе заказ?»</div>
+      </div></div>
+
+      <div class="row"><div class="row-label">PUSH</div><div class="cols cols-4">
+        <div class="push">«Запишемся на анализы?» Анализ, который вы искали, снова доступен — «Выбрать анализы»</div>
+        <div class="push empty">нет пуша</div>
+        <div class="push">«Анализы ждут в корзине» — осталось завершить оформление, кешбэк до 10% — «Продолжить оформление»</div>
+        <div class="push">зависит от способа — см. справа</div>
+      </div></div>
+
+      <div class="row"><div class="row-label">TOUCHPOINTS</div><div class="cols cols-4">
+        <div class="touchpoints"><span class="tp tp-app">Прил.</span></div>
+        <div class="touchpoints"><span class="tp tp-app">Прил.</span></div>
+        <div class="touchpoints"><span class="tp tp-app">Прил.</span><span class="tp tp-pay">Оплата</span></div>
+        <div class="touchpoints"><span class="tp tp-app">Прил.</span><span class="tp tp-support">СП</span></div>
+      </div></div>
+
+      <div class="row"><div class="row-label">ACTORS</div><div class="cols cols-4">
+        <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div></div>
+        <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div></div>
+        <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div></div>
+        <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div><div class="actor"><span class="dot dot-lab"></span>Лаб.</div><div class="actor"><span class="dot dot-support"></span>СП</div></div>
+      </div></div>
+
+      <div class="row"><div class="row-label">ВОЗВРАТ</div><div class="cols cols-4">
+        <div class="returns empty">—</div>
+        <div class="returns empty">— (свободно до оплаты)</div>
+        <div class="returns note">С оплаты — разные правила справа</div>
+        <div class="returns note">см. справа</div>
+      </div></div>
+
+      <div class="row"><div class="row-label">EMOTIONS</div><div class="cols cols-4">
+        <div class="emotion-wrap"><div class="face" style="background:#8a8a82;">·</div><div class="emotion-label">Нейтрально</div></div>
+        <div class="emotion-wrap"><div class="face" style="background:#3a5ba0;">+</div><div class="emotion-label">Заинтересован</div></div>
+        <div class="emotion-wrap"><div class="face" style="background:#4a90c2;">~</div><div class="emotion-label">Сосредоточен</div></div>
+        <div class="emotion-wrap"><div class="face" style="background:#c58a2e;">!</div><div class="emotion-label">Ожидание</div></div>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ===================== СЕРЕДИНА: РАЗВИЛКА, ВЫНЕСЕНА ЗА ПРЕДЕЛЫ КАРТОЧКИ ===================== -->
+  <div class="col-mid">
+    <div class="mini-fork">
+      <div class="mini-node">Отслеживание статуса</div>
+      <div class="mini-branch-row">
+        <div class="mini-btn med" id="btn-med">→ Медцентр</div>
+        <div class="mini-btn dom" id="btn-dom">→ Выезд на дом</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== ПРАВЫЙ СТОЛБЕЦ: ДВЕ КАРТОЧКИ ===================== -->
+  <div class="col-right">
+
+    <div>
+      <div class="label blue">Медцентр</div>
+      <div class="card sc-medcenter" id="med-card">
+        <div class="header"><h1>Customer Journey Map —</h1><div class="sub">Сценарий «медцентр»</div></div>
+
+        <div class="row stage-row"><div class="row-label">STAGE</div><div class="cols">
+          <div class="stage">Ожидаем вас в медцентре</div>
+          <div class="stage">В работе у лаборатории</div>
+          <div class="stage">Результат задерживается</div>
+          <div class="stage">Частично готовые анализы</div>
+          <div class="stage history">Результат готов!</div>
+          <div class="stage history">Вы отменили заказ</div>
+        </div></div>
+
+        <div class="row"><div class="row-label">STEPS</div><div class="cols">
+          <div class="steps"><ul><li>Invivo — QR-код (нужен скрин с чёткой инструкцией + доступ к СП, если непонятно куда предъявлять)</li><li>Детали / Отменить</li></ul></div>
+          <div class="steps"><ul><li>Дата готовности</li><li>Оплачено</li></ul></div>
+          <div class="steps"><ul><li>Дата сдвинута</li><li>Детали / СП</li></ul></div>
+          <div class="steps"><ul><li>Счётчик 2 из 3</li><li>Посмотреть / СП</li></ul></div>
+          <div class="steps"><ul><li>Результат, PDF</li><li>Записаться снова</li></ul></div>
+          <div class="steps"><ul><li>Статус в истории</li><li>Записаться снова</li></ul></div>
+        </div></div>
+
+        <div class="row"><div class="row-label">THOUGHTS</div><div class="cols">
+          <div class="thought">«Не забыть бы»</div>
+          <div class="thought">«Уже в процессе»</div>
+          <div class="thought">«Почему задержка?»</div>
+          <div class="thought">«Хоть часть готова»</div>
+          <div class="thought">«Наконец готово»</div>
+          <div class="thought">«Оформлю заново»</div>
+        </div></div>
+
+        <div class="row"><div class="row-label">PUSH</div><div class="cols">
+          <div class="push">«Вы записались на анализы» — адрес медцентра, часы работы (живая очередь) — «Как подготовиться?»</div>
+          <div class="push empty">нет пуша</div>
+          <div class="push">«Результаты анализов задерживаются» — ожидаемая дата готовности — «Написать в поддержку»</div>
+          <div class="push">«Часть анализов готова» — N из M анализов готовы, остальное к [дате] — «Посмотреть результаты»</div>
+          <div class="push">«Анализы готовы» — результаты в приложении, можно записаться на консультацию в «Моё здоровье» — «Посмотреть результаты»</div>
+          <div class="push">«Вы отменили сдачу анализов» — деньги вернутся на карту в течение 3 рабочих дней — «Записаться снова»</div>
+        </div></div>
+
+        <div class="row"><div class="row-label">TOUCHPOINTS</div><div class="cols">
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span><span class="tp tp-qr">QR</span><span class="tp tp-support">СП</span></div>
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span></div>
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span><span class="tp tp-support">СП</span></div>
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span><span class="tp tp-support">СП</span></div>
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span></div>
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span></div>
+        </div></div>
+
+        <div class="row"><div class="row-label">ACTORS</div><div class="cols">
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div></div>
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div><div class="actor"><span class="dot dot-lab"></span>Лаб.</div></div>
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div><div class="actor"><span class="dot dot-lab"></span>Лаб.</div><div class="actor"><span class="dot dot-support"></span>СП</div></div>
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div><div class="actor"><span class="dot dot-lab"></span>Лаб.</div><div class="actor"><span class="dot dot-support"></span>СП</div></div>
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div></div>
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div><div class="actor"><span class="dot dot-support"></span>СП</div></div>
+        </div></div>
+
+        <div class="row"><div class="row-label">ВОЗВРАТ</div><div class="cols">
+          <div class="returns manual">При отмене — автовозврат. При неявке — перенос или отмена (канал уточняется: СП или в приложении)</div>
+          <div class="returns empty">—</div>
+          <div class="returns empty">—</div>
+          <div class="returns empty">—</div>
+          <div class="returns empty">—</div>
+          <div class="returns full">Деньги не сгорают (держим ли деньги пользователя 30 дней? — уточняется по документам)</div>
+        </div></div>
+
+        <div class="row"><div class="row-label">EMOTIONS</div><div class="cols">
+          <div class="emotion-wrap"><div class="face" style="background:#4a90c2;">~</div><div class="emotion-label">Спокоен</div></div>
+          <div class="emotion-wrap"><div class="face" style="background:#8a8a82;">·</div><div class="emotion-label">Нейтрально</div></div>
+          <div class="emotion-wrap"><div class="face" style="background:#c58a2e;">!</div><div class="emotion-label">Беспокоится</div></div>
+          <div class="emotion-wrap"><div class="face" style="background:#4a90c2;">~</div><div class="emotion-label">Любопытство</div></div>
+          <div class="emotion-wrap"><div class="face" style="background:#2e7d5b;">✓</div><div class="emotion-label">Облегчение</div></div>
+          <div class="emotion-wrap"><div class="face" style="background:#c25a3e;">?</div><div class="emotion-label">Разоч./нейтр.</div></div>
+        </div></div>
+
+        <div class="footnote"><b>Invivo:</b> QR-вход и кнопка поддержки уже на первом статусе.</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="label" style="color:#a0522d;">На дому</div>
+      <div class="card sc-domu" id="dom-card">
+        <div class="header"><h1>Customer Journey Map —</h1><div class="sub">Сценарий «выезд на дом»</div></div>
+
+        <div class="row stage-row"><div class="row-label">STAGE</div><div class="cols">
+          <div class="stage">Ожидайте забора анализов</div>
+          <div class="stage">В работе у лаборатории</div>
+          <div class="stage">Результат задерживается</div>
+          <div class="stage">Готовые анализы</div>
+          <div class="stage history">Результат готов!</div>
+          <div class="stage history">Вы отменили заказ</div>
+        </div></div>
+
+        <div class="row"><div class="row-label">STEPS</div><div class="cols">
+          <div class="steps"><ul><li>Слот и адрес выезда</li><li>Изменить дату, время или адрес (стоимость одна и та же) / Отменить</li></ul></div>
+          <div class="steps"><ul><li>Дата готовности</li><li>Детали заказа</li></ul></div>
+          <div class="steps"><ul><li>Дата сдвинута</li><li>Детали / СП</li></ul></div>
+          <div class="steps"><ul><li>Счётчик 2 из 4</li><li>Посмотреть / СП</li></ul></div>
+          <div class="steps"><ul><li>Результат, PDF</li><li>Записаться снова</li></ul></div>
+          <div class="steps"><ul><li>Статус в истории</li><li>Записаться снова</li></ul></div>
+        </div></div>
+
+        <div class="row"><div class="row-label">THOUGHTS</div><div class="cols">
+          <div class="thought">«Успею быть дома?»</div>
+          <div class="thought">«Забрали, теперь жду»</div>
+          <div class="thought">«Почему задержка?»</div>
+          <div class="thought">«Хоть часть готова»</div>
+          <div class="thought">«Наконец готово»</div>
+          <div class="thought">«Отменил вовремя»</div>
+        </div></div>
+
+        <div class="row"><div class="row-label">PUSH</div><div class="cols">
+          <div class="push">«Вы записались на анализы» — адрес и время выезда — «Посмотреть детали»<br>«Сдача анализов перенесена» — при переносе даты/времени<br>«Завтра сдача анализов» — за сутки, с адресом — «Как подготовиться?»<br>«Медсестра в пути» — будет через 30 минут</div>
+          <div class="push empty">нет пуша</div>
+          <div class="push">«Результаты анализов задерживаются» — ожидаемая дата готовности — «Написать в поддержку»</div>
+          <div class="push">«Часть анализов готова» — N из M анализов готовы, остальное к [дате] — «Посмотреть результаты»</div>
+          <div class="push">«Анализы готовы» — результаты в приложении, можно записаться на консультацию в «Моё здоровье» — «Посмотреть результаты»</div>
+          <div class="push">Деньги вернутся — «Вы отменили сдачу анализов», возврат за 3 рабочих дня — «Записаться снова»<br>Деньги не вернутся (отмена &lt;2ч) — та же плашка, но удержана стоимость выезда</div>
+        </div></div>
+
+        <div class="row"><div class="row-label">TOUCHPOINTS</div><div class="cols">
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span><span class="tp tp-wa">WhatsApp</span></div>
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span></div>
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span><span class="tp tp-support">СП</span></div>
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span><span class="tp tp-support">СП</span></div>
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span></div>
+          <div class="touchpoints"><span class="tp tp-app">Прил.</span></div>
+        </div></div>
+
+        <div class="row"><div class="row-label">ACTORS</div><div class="cols">
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div><div class="actor"><span class="dot dot-brigade"></span>Бригада</div><div class="actor"><span class="dot dot-support"></span>СП</div></div>
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div><div class="actor"><span class="dot dot-lab"></span>Лаб.</div></div>
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div><div class="actor"><span class="dot dot-lab"></span>Лаб.</div><div class="actor"><span class="dot dot-support"></span>СП</div></div>
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div><div class="actor"><span class="dot dot-lab"></span>Лаб.</div><div class="actor"><span class="dot dot-support"></span>СП</div></div>
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div></div>
+          <div class="actors"><div class="actor"><span class="dot dot-user"></span>Польз.</div><div class="actor"><span class="dot dot-support"></span>СП</div></div>
+        </div></div>
+
+        <div class="row"><div class="row-label">ВОЗВРАТ</div><div class="cols">
+          <div class="returns manual">&gt;2ч авто; &lt;2ч — кейс СП: возврат или удержание до 1500 тг именно при холостом выезде (бригада приехала впустую)</div>
+          <div class="returns empty">—</div>
+          <div class="returns empty">—</div>
+          <div class="returns empty">—</div>
+          <div class="returns empty">—</div>
+          <div class="returns full">Итог — из кейса СП или полный возврат</div>
+        </div></div>
+
+        <div class="row"><div class="row-label">EMOTIONS</div><div class="cols">
+          <div class="emotion-wrap"><div class="face" style="background:#c58a2e;">!</div><div class="emotion-label">Собран</div></div>
+          <div class="emotion-wrap"><div class="face" style="background:#8a8a82;">·</div><div class="emotion-label">Нейтрально</div></div>
+          <div class="emotion-wrap"><div class="face" style="background:#c58a2e;">!</div><div class="emotion-label">Беспокоится</div></div>
+          <div class="emotion-wrap"><div class="face" style="background:#4a90c2;">~</div><div class="emotion-label">Любопытство</div></div>
+          <div class="emotion-wrap"><div class="face" style="background:#2e7d5b;">✓</div><div class="emotion-label">Облегчение</div></div>
+          <div class="emotion-wrap"><div class="face" style="background:#c25a3e;">?</div><div class="emotion-label">Разоч./нейтр.</div></div>
+        </div></div>
+
+        <div class="footnote">Перенос &lt;1ч до приёма — блок без права переноса.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <svg class="arrows-overlay" id="overlay">
+    <defs>
+      <marker id="arrHead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M1 1L9 5L1 9" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      </marker>
+    </defs>
+    <path id="path-med" fill="none" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrHead)"/>
+    <path id="path-dom" fill="none" stroke="#1a1a1a" stroke-width="2" marker-end="url(#arrHead)"/>
+  </svg>
+</div>
+
+<script>
+  function draw() {
+    const layout = document.getElementById('layout');
+    const layoutBox = layout.getBoundingClientRect();
+    const overlay = document.getElementById('overlay');
+    overlay.setAttribute('width', layoutBox.width);
+    overlay.setAttribute('height', layoutBox.height);
+
+    function rel(el) {
+      const b = el.getBoundingClientRect();
+      return {
+        left: b.left - layoutBox.left, right: b.right - layoutBox.left,
+        top: b.top - layoutBox.top, bottom: b.bottom - layoutBox.top,
+        midY: b.top - layoutBox.top + b.height / 2
+      };
+    }
+
+    const btnMed = rel(document.getElementById('btn-med'));
+    const btnDom = rel(document.getElementById('btn-dom'));
+    const medCard = rel(document.getElementById('med-card'));
+    const domCard = rel(document.getElementById('dom-card'));
+
+    const startXMed = btnMed.right - 10;
+    const startXDom = btnDom.right - 10;
+
+    document.getElementById('path-med').setAttribute('d',
+      `M ${startXMed} ${btnMed.midY} C ${startXMed + 100} ${btnMed.midY}, ${medCard.left - 100} ${medCard.top + 20}, ${medCard.left - 10} ${medCard.top + 20}`);
+
+    document.getElementById('path-dom').setAttribute('d',
+      `M ${startXDom} ${btnDom.midY} C ${startXDom + 60} ${btnDom.midY}, ${domCard.left - 100} ${domCard.top + 20}, ${domCard.left - 10} ${domCard.top + 20}`);
+  }
+  window.addEventListener('load', draw);
+  window.addEventListener('resize', draw);
+</script>
+
+</body>
+</html>
