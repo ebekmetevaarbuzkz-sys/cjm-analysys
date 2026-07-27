@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freedom Здоровье — стратегия роста</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEF1EC; --surface:#FFFFFF; --ink:#16231F; --ink-soft:#526059; --ink-faint:#8A968F;
+    --amber:#C97A3C; --amber-soft:#F1DFC9; --teal:#2E6F63; --teal-soft:#DCEAE6;
+    --navy:#1F3A5F; --navy-soft:#DCE4EE; --danger:#A63D40; --danger-soft:#F3DEDD;
+    --line:#D8DDD3; --line-strong:#B9C2B5; --radius:2px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',sans-serif;font-size:14.5px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  h1,h2,h3{font-family:'Space Grotesk',sans-serif;font-weight:600;margin:0;}
+
+  .layout{display:flex;}
+  .toc{
+    width:230px;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;
+    background:var(--ink);color:#EEF1EC;padding:30px 0 20px;
+  }
+  .toc .kicker{padding:0 22px 18px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;color:var(--amber);text-transform:uppercase;border-bottom:1px solid rgba(255,255,255,0.12);margin-bottom:6px;}
+  .toc a{
+    display:block;padding:9px 22px;color:#C9D1C7;text-decoration:none;font-size:12.5px;border-left:3px solid transparent;
+  }
+  .toc a .n{font-family:'IBM Plex Mono',monospace;color:var(--amber);font-size:10px;margin-right:6px;}
+  .toc a:hover{background:rgba(255,255,255,0.05);color:#fff;}
+  .toc a.active{background:rgba(255,255,255,0.08);color:#fff;border-left-color:var(--amber);}
+
+  main{flex:1;min-width:0;max-width:960px;padding:60px 60px 120px;}
+
+  .cover{margin-bottom:70px;}
+  .cover .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;}
+  .cover h1{font-size:38px;margin:14px 0 10px;line-height:1.15;}
+  .cover p{color:var(--ink-soft);max-width:560px;font-size:15px;margin:0 0 18px;}
+  .cover .byline{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-faint);}
+
+  section{margin-bottom:64px;scroll-margin-top:24px;}
+  section .step{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+  section h2{font-size:24px;margin-bottom:10px;}
+  section > p.lead{color:var(--ink-soft);max-width:660px;margin:0 0 22px;font-size:14px;}
+
+  .quote{
+    border-left:3px solid var(--amber);padding:10px 18px;font-style:italic;color:var(--ink);
+    background:var(--amber-soft);font-size:13.5px;margin:18px 0;
+  }
+  .quote cite{display:block;margin-top:6px;font-style:normal;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#5A3A1D;}
+
+  /* personas */
+  .persona-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+  @media (max-width:800px){.persona-grid{grid-template-columns:1fr;}}
+  .persona{background:var(--surface);border:1px solid var(--line);padding:20px 22px;}
+  .persona .role{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--teal);text-transform:uppercase;letter-spacing:.05em;}
+  .persona h3{font-size:17px;margin:5px 0 2px;}
+  .persona .sub{font-size:12px;color:var(--ink-faint);margin-bottom:10px;}
+  .persona ul{margin:0;padding-left:18px;font-size:13px;}
+  .persona li{margin-bottom:6px;}
+  .common-box{margin-top:18px;background:var(--teal-soft);border:1px solid var(--teal);padding:16px 20px;font-size:13px;color:#1D473E;}
+  .common-box b{display:block;font-family:'Space Grotesk',sans-serif;margin-bottom:6px;color:#153630;}
+
+  /* tables */
+  table{width:100%;border-collapse:collapse;font-size:12.8px;background:var(--surface);}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top;}
+  th{font-family:'IBM Plex Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-soft);border-bottom:2px solid var(--line-strong);}
+  td.verdict{white-space:nowrap;font-family:'IBM Plex Mono',monospace;font-size:11px;}
+  .v-take{color:var(--teal);} .v-strong{color:var(--navy);font-weight:600;} .v-skip{color:var(--ink-faint);} .v-fix{color:var(--danger);}
+  .table-wrap{overflow-x:auto;border:1px solid var(--line);}
+
+  /* insight break */
+  .break{
+    background:var(--ink);color:#EEF1EC;padding:44px 46px;margin:0 -60px 64px;
+  }
+  .break .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--amber);letter-spacing:.14em;text-transform:uppercase;}
+  .break h2{color:#fff;font-size:30px;margin:14px 0 14px;max-width:520px;}
+  .break p{color:#C9D1C7;max-width:600px;font-size:14px;margin:0 0 20px;}
+  .break .against{display:flex;gap:16px;flex-wrap:wrap;}
+  .against-item{border:1px solid rgba(255,255,255,0.2);padding:12px 16px;flex:1;min-width:180px;font-size:12.5px;}
+  .against-item b{display:block;color:var(--amber);font-family:'Space Grotesk',sans-serif;font-size:13px;margin-bottom:4px;}
+
+  /* revenue layers */
+  .layers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media (max-width:800px){.layers{grid-template-columns:1fr;}}
+  .layer{background:var(--surface);border:1px solid var(--line);padding:20px;border-top:4px solid var(--line-strong);}
+  .layer.l1{border-top-color:var(--ink-faint);}
+  .layer.l2{border-top-color:var(--amber);}
+  .layer.l3{border-top-color:var(--teal);}
+  .layer .tag{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.05em;}
+  .layer h3{font-size:15.5px;margin:6px 0 8px;}
+  .layer p{font-size:12.5px;color:var(--ink-soft);margin:0 0 10px;}
+  .layer .metric{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--teal);}
+
+  /* bridges */
+  .bridges{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:18px;}
+  @media (max-width:800px){.bridges{grid-template-columns:1fr;}}
+  .bridge{background:var(--surface);border:1px solid var(--line);padding:16px 18px;}
+  .bridge h4{font-size:14px;margin:0 0 6px;}
+  .bridge p{font-size:12.5px;color:var(--ink-soft);margin:0 0 8px;}
+  .status-pill{font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 8px;border-radius:20px;}
+  .status-pill.live{background:var(--teal-soft);color:var(--teal);}
+  .status-pill.hyp{background:var(--amber-soft);color:var(--amber);}
+
+  /* journey map */
+  .journey{display:flex;border:1px solid var(--line);background:var(--surface);overflow-x:auto;}
+  .j-step{flex:1;min-width:150px;padding:16px 14px;border-right:1px solid var(--line);position:relative;}
+  .j-step:last-child{border-right:none;}
+  .j-step .jn{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--ink-faint);}
+  .j-step h5{font-size:12.5px;margin:4px 0 6px;font-family:'Space Grotesk',sans-serif;}
+  .j-step p{font-size:11.5px;color:var(--ink-soft);margin:0;}
+  .j-step.recover{background:var(--teal-soft);}
+  .j-step.recover h5{color:#1D473E;}
+  .emo-bar{height:5px;background:var(--line-strong);margin-top:10px;border-radius:3px;overflow:hidden;}
+  .emo-fill{height:100%;background:var(--danger);}
+  .j-step.recover .emo-fill{background:var(--teal);}
+
+  /* priority matrix */
+  .prio-table td.num, .prio-table th.num{text-align:center;}
+  .prio-table td.total{font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--ink);text-align:center;}
+
+  /* hypothesis bank */
+  .hyp-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media (max-width:800px){.hyp-cols{grid-template-columns:1fr;}}
+  .hyp-col{background:var(--surface);border:1px solid var(--line);padding:16px 18px;}
+  .hyp-col .htag{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--amber);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;}
+  .hyp-col h4{font-size:14px;margin:0 0 8px;}
+  .hyp-col ul{margin:0;padding-left:16px;font-size:12.5px;}
+  .hyp-col li{margin-bottom:5px;}
+
+  /* approach steps */
+  .approach{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+  @media (max-width:800px){.approach{grid-template-columns:1fr;}}
+  .app-step{background:var(--surface);border:1px solid var(--line);padding:18px 20px;}
+  .app-step .an{font-family:'Space Grotesk',sans-serif;font-size:26px;color:var(--amber-soft);-webkit-text-stroke:1.5px var(--amber);color:transparent;}
+  .app-step h4{font-size:14.5px;margin:6px 0 8px;}
+  .app-step p{font-size:12.5px;color:var(--ink-soft);margin:0;}
+
+  .final-note{border-top:1px solid var(--line-strong);padding-top:20px;font-size:13px;color:var(--ink-soft);max-width:640px;}
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="toc" id="toc">
+    <div class="kicker">Freedom · Здоровье</div>
+    <a href="#personas"><span class="n">01</span>Люди</a>
+    <a href="#pains"><span class="n">02</span>Боли</a>
+    <a href="#qomek"><span class="n">03</span>Конкурент Qomek</a>
+    <a href="#labs"><span class="n">04</span>Лаборатории</a>
+    <a href="#insight"><span class="n">05</span>Перелом</a>
+    <a href="#revenue"><span class="n">06</span>Как зарабатываем</a>
+    <a href="#funnel"><span class="n">07</span>Замыкаем воронку</a>
+    <a href="#journey"><span class="n">08</span>Карта пути</a>
+    <a href="#priority"><span class="n">09</span>Матрица ставок</a>
+    <a href="#bank"><span class="n">10</span>Банк гипотез</a>
+    <a href="#approach"><span class="n">11</span>Подход</a>
+  </nav>
+
+  <main>
+    <div class="cover">
+      <div class="eyebrow">Discovery-исследование · 3 квартал 2026</div>
+      <h1>Предложения по стратегии роста блока «Здоровье»</h1>
+      <p>Разбор рынка, боли пользователей и гипотезы роста здоровья в Freedom SuperApp — от первых интервью до модели заработка и приоритизации ставок.</p>
+      <div class="byline">Евгения Бекметьева · Product Manager B2C</div>
+    </div>
+
+    <section id="personas">
+      <div class="step">Опыт пользователя · Шаг 1</div>
+      <h2>Как люди живут со своим здоровьем</h2>
+      <p class="lead">Первые два глубинных интервью. Разные полюса поведения — но боли на ключевых этапах общие. Сигнал: сегментировать нужно по поведению, а не по демографии.</p>
+
+      <div class="persona-grid">
+        <div class="persona">
+          <div class="role">«CEO своего здоровья»</div>
+          <h3>Асема, 34</h3>
+          <div class="sub">Планирование беременности · платит легко</div>
+          <ul>
+            <li>Диагностика до лечения, анализы раз в полгода системно</li>
+            <li>Сначала обсуждает с ChatGPT, потом с врачом</li>
+            <li>Тревога от тона: генетик «час рассказывала, как страшно»</li>
+            <li>Рассрочку предлагали — не заметила, деньги были</li>
+          </ul>
+        </div>
+        <div class="persona">
+          <div class="role">«Пока не заболею»</div>
+          <h3>Сани, 34</h3>
+          <div class="sub">Ребёнок 2 года · без страховки, всё горит</div>
+          <ul>
+            <li>Анализы только по болезни; чекапы и зубы заброшены</li>
+            <li>Кризис с ребёнком: 100 000 ₸ за 2 недели, без страховки</li>
+            <li>Окно сдачи 8–11 утра, лаборатория за 15 км — барьер</li>
+            <li>Переплата за лекарства: 15 тыс оптом vs 40–50 в розницу</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="common-box">
+        <b>Общее у обеих — несмотря на разное поведение</b>
+        Обе — организаторы здоровья семьи · обе не смогли открыть результат с первого раза · обе назвали болью ожидание и фрагментацию «сдал → жди → к врачу → в аптеку» · обе хранят результаты в папке и фото · обе просят ассистента-организатора.
+      </div>
+      <div class="quote">«Хочется поехать и всё в одном месте сделать — а не сдать анализы, дождаться, потом ехать к врачу, потом в аптеку»<cite>— Сани, о фрагментации пути</cite></div>
+    </section>
+
+    <section id="pains">
+      <div class="step">Боли пользователя · Шаг 1.1</div>
+      <h2>Боли, на которые можно давить</h2>
+      <p class="lead">Из двух интервью — по этапам пути. Каждая боль реальна и названа дословно. Правая колонка — рычаг: чем именно Freedom может на неё давить.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Этап</th><th>Боль (дословно из интервью)</th><th>На что давим</th></tr>
+          <tr><td>Выбор и запись</td><td>«Окно 8–11 утра, лаборатория за 15 км» — анализ ребёнка так и не сдан</td><td>Выезд на дом, слоты, гибкий график в приложении</td></tr>
+          <tr><td>Выбор лаборатории</td><td>«Инвиво и Олимп отправляют биоматериал в Москву» — выбор вслепую</td><td>Прозрачность логистики и сроков до заказа</td></tr>
+          <tr><td>Оплата и лекарства</td><td>«Оптом 15 тыс, в рознице 40–50» — переплата за препараты</td><td>Аптека + рассрочка + кешбэк «всё в одном месте»</td></tr>
+          <tr><td>Ожидание</td><td>«Самое неприятное — ждать, хотелось бы быстрее», 2 недели тревоги</td><td>Статус-трекер, честные сроки, пуш «готово»</td></tr>
+          <tr><td>Результат</td><td>Обе не смогли скачать результат с первого раза</td><td>Результат сразу в приложении, без спама и чеков</td></tr>
+          <tr><td>Интерпретация</td><td>«Генетик час рассказывала, как страшно» при хороших анализах</td><td>Расшифровка бережным тоном, снятие тревоги</td></tr>
+          <tr><td>Весь путь</td><td>«Сдал → жди → к врачу → в аптеку» — всё в разных местах</td><td>Единый путь в SuperApp: врач, аптека, история</td></tr>
+        </table>
+      </div>
+      <p class="final-note">Самая частая боль обеих — фрагментация: путь здоровья разорван между лабораторией, врачом и аптекой. Именно на неё давит вся стратегия — собрать путь в одном приложении.</p>
+    </section>
+
+    <section id="qomek">
+      <div class="step">Главный конкурент · Шаг 2</div>
+      <h2>Qomek: не приложение, а экосистема</h2>
+      <p class="lead">~1 млн MAU. Человек заходит сдать анализ — остаётся ради записи к врачу, страховки, аптеки. Это их ставка на удержание, и та же модель, к которой идём мы.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Фича Qomek</th><th>Ценность для пользователя</th><th>Преимущество Freedom</th><th>Вердикт</th></tr>
+          <tr><td>Оценка здоровья</td><td>Job «понять, что со мной» — в него уперлись оба интервью</td><td>Оценка по реальным данным Invivo, не по анкете</td><td class="verdict v-take">Брать умнее</td></tr>
+          <tr><td>Запись к врачу</td><td>Закрывает боль «сдал → ехать к врачу»</td><td>Результат → врач в один тап</td><td class="verdict v-take">Брать · Г1</td></tr>
+          <tr><td>Онлайн-консультация</td><td>Следующий шаг после результата</td><td>Врач в приложении сразу после анализа</td><td class="verdict v-take">Брать · Г1</td></tr>
+          <tr><td>Страхование</td><td>Синергия со здоровьем</td><td>Своя страховая — без партнёра (у них Nomad)</td><td class="verdict v-strong">Сильное</td></tr>
+          <tr><td>Медсестра на дом</td><td>Боль «окно 8–11, лаб за 15 км»</td><td>Заказ и оплата в SuperApp</td><td class="verdict v-take">Брать</td></tr>
+          <tr><td>Аптека</td><td>Боль: переплата, «всё в одном месте»</td><td>Рассрочка и кешбэк на лекарства</td><td class="verdict v-take">Брать+</td></tr>
+          <tr><td>Корп. клиентам</td><td>B2B-чекапы, высокий чек</td><td>Бизнес-клиенты банка</td><td class="verdict v-take">Брать · Г3</td></tr>
+          <tr><td>Витамины (Halsa)</td><td>Допродажа, низкая частота</td><td>Свой бренд — отдельный бизнес</td><td class="verdict v-skip">Не приоритет</td></tr>
+        </table>
+      </div>
+      <p class="final-note">Ключевой вывод: сила Qomek не в отдельной фиче, а в экосистеме вокруг пользователя. Мы можем повторить её — но под нашей лежат деньги, карта и KYC, которых у Qomek нет. «Оценка здоровья» — их слабое место: вероятно, анкета, а не анализ реальных показателей. Здесь можем сделать кардинально лучше.</p>
+    </section>
+
+    <section id="labs">
+      <div class="step">Наши лаборатории · Шаг 3</div>
+      <h2>Что есть у лабораторий — и чего нет</h2>
+      <p class="lead">Прошли сценарии Олимп, Инвиво и референс Инвитро. Вывод отрезвляющий: у локальных партнёров цифра архаичная. Единственный эталон — Инвитро, и тот из РФ.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Фича</th><th>У кого есть</th><th>Какую боль закрывает</th><th>Вердикт</th></tr>
+          <tr><td>Динамика показателей</td><td>Инвитро</td><td>«Понять результат» — главный job обеих</td><td class="verdict v-take">Брать · эталон</td></tr>
+          <tr><td>Оценка к границам нормы</td><td>Инвитро</td><td>Тревога от непонятных цифр (Асема)</td><td class="verdict v-take">Брать · Г1</td></tr>
+          <tr><td>Статус готовности заказа</td><td>Инвитро</td><td>«Ожидание — главная боль» (обе, 2ГИС)</td><td class="verdict v-take">Брать · Г1</td></tr>
+          <tr><td>Врач онлайн 24/7</td><td>Инвитро</td><td>«Сдал → ехать к врачу» (Сани)</td><td class="verdict v-take">Брать · Г1</td></tr>
+          <tr><td>Беременность под контролем</td><td>Инвитро</td><td>Прямо профиль Асемы</td><td class="verdict v-take">Брать · персона</td></tr>
+          <tr><td>Вызов на дом</td><td>Инвитро, Инвиво</td><td>«Окно 8–11, лаб за 15 км» (Сани)</td><td class="verdict v-strong">Есть у вас</td></tr>
+          <tr><td>Дисконтная карта (штрихкод)</td><td>Олимп</td><td>Лоялти, но архаично</td><td class="verdict v-fix">Заменяем кешбэком</td></tr>
+          <tr><td>Результаты по чеку / email</td><td>Олимп, Инвиво</td><td>Теряется в спаме — антипаттерн</td><td class="verdict v-fix">Это и чиним</td></tr>
+        </table>
+      </div>
+      <p class="final-note">Стратегический вывод: у Инвиво, Олимп и Хеликс нет нормального цифрового продукта — email, чеки, пластиковые карты. Цифровой слой вокруг анализов в Казахстане фактически свободен. Freedom с ресурсами SuperApp может занять его первым — не догоняя лаборатории, а обгоняя в том, чего у них нет.</p>
+    </section>
+
+    <div class="break" id="insight">
+      <div class="eyebrow">Перелом · Что мы поняли</div>
+      <h2>«Анализы там, где твои деньги»</h2>
+      <p>Мы думали, что конкурируем с Qomek за анализы. Но мы на одной лаборатории Invivo — анализами не отстроиться. На самом деле мы конкурируем за то, чтобы стать местом, куда человек идёт со своим здоровьем. И здесь у нас есть то, чего нет ни у кого: деньги, карта и KYC миллионов пользователей SuperApp.</p>
+      <div class="against">
+        <div class="against-item"><b>Против прямых</b>встроенность в SuperApp вместо ещё одного медприложения</div>
+        <div class="against-item"><b>Против косвенных</b>снижаем денежный и организационный барьер</div>
+        <div class="against-item"><b>Против бездействия</b>убираем причину откладывать</div>
+      </div>
+    </div>
+
+    <section id="revenue">
+      <div class="step">Как зарабатываем · Шаг 4</div>
+      <h2>Анализы не зарабатывают — они приводят</h2>
+      <p class="lead">Три слоя дохода. Анализы — вход с низкой маржой. Деньги приходят с того, что умеет банк и не умеют медсервисы.</p>
+      <div class="layers">
+        <div class="layer l1">
+          <div class="tag">Слой 1 · Трафик</div>
+          <h3>Анализы</h3>
+          <p>Комиссия с заказа. Низкая маржа — это не заработок, а дверь: приводим пользователя в экосистему здоровья.</p>
+          <div class="metric">Метрика: конверсия MAU → первый заказ</div>
+        </div>
+        <div class="layer l2">
+          <div class="tag">Слой 2 · Маржа</div>
+          <h3>Деньги банка поверх медицины</h3>
+          <p>Рассрочка на дорогое лечение, кешбэк, медкопилка, своя страховая. Вот где маржа — и чего нет ни у Qomek, ни у лабораторий.</p>
+          <div class="metric">Метрика: attach rate, доход на пользователя</div>
+        </div>
+        <div class="layer l3">
+          <div class="tag">Слой 3 · LTV</div>
+          <h3>Экосистема удержания</h3>
+          <p>Врач, аптека, подписка на чекапы, семейный профиль. Растят частоту и удержание — превращают разовый заказ в отношения.</p>
+          <div class="metric">Метрика: retention 90 дней, повторный заказ</div>
+        </div>
+      </div>
+      <p class="final-note">Суть модели: медсервисы застряли в первом слое — комиссия с анализов, низкая маржа. Мы начинаем там же, но у нас под ногами второй и третий слой, которых у них нет. Так мы и захватываем рынок: не ценой анализа, а глубиной кошелька за ним.</p>
+    </section>
+
+    <section id="funnel">
+      <div class="step">Замыкаем воронку · Шаг 5</div>
+      <h2>Пришёл за анализом — остался в экосистеме</h2>
+      <p class="lead">Сегодня путь обрывается на «результат готов». Замкнуть воронку — построить мосты к следующему шагу.</p>
+      <div class="bridges">
+        <div class="bridge">
+          <h4>Результат → Врач</h4>
+          <p>Логичный шаг после отклонения в показателе, а не отдельная кнопка</p>
+          <span class="status-pill live">Есть в интерфейсе</span>
+        </div>
+        <div class="bridge">
+          <h4>Результат → Аптека</h4>
+          <p>Боль Сани: переплата за лекарства, «хочу всё в одном месте»</p>
+          <span class="status-pill hyp">Гипотеза Q3</span>
+        </div>
+        <div class="bridge">
+          <h4>Лечение → Рассрочка</h4>
+          <p>Переток в банк: дорогое лечение → кредитный продукт с маржой</p>
+          <span class="status-pill hyp">Гипотеза Q3</span>
+        </div>
+      </div>
+      <div class="common-box">
+        <b>Петля, которой нет ни у кого</b>
+        Пользователь уже внутри SuperApp с деньгами. Пришёл за анализом → увидел кешбэк → взял рассрочку на лечение — это уже кредитный продукт банка. Медицина приводит в финансы, финансы возвращают в медицину. Ни Qomek, ни лаборатории так не могут — у них нет банка под ногами.
+      </div>
+      <p class="final-note">Метрика замыкания: attach rate — сколько заказавших анализ взяли второй продукт. Сейчас ≈ 0. Сдвинуть его в Q3 — измеримый Key Result. Спрос подтверждён: обе респондентки просили ассистента, который ведёт от шага к шагу.</p>
+    </section>
+
+    <section id="journey">
+      <div class="step">Карта пути · Доказательство</div>
+      <h2>Где падает ценность — и где мы её ловим</h2>
+      <p class="lead">Эмоция пользователя падает к «получил результат» — там, где сегодня продукт заканчивается. Фичи Г1 поднимают её обратно и превращают транзакцию в возврат.</p>
+      <div class="journey">
+        <div class="j-step"><div class="jn">1</div><h5>Повод</h5><p>Решение проверить здоровье</p><div class="emo-bar"><div class="emo-fill" style="width:30%"></div></div></div>
+        <div class="j-step"><div class="jn">2</div><h5>Выбор</h5><p>Лаборатория, время, цена</p><div class="emo-bar"><div class="emo-fill" style="width:50%"></div></div></div>
+        <div class="j-step"><div class="jn">3</div><h5>Сдача</h5><p>Визит, барьер логистики</p><div class="emo-bar"><div class="emo-fill" style="width:60%"></div></div></div>
+        <div class="j-step"><div class="jn">4</div><h5>Ожидание</h5><p>Тревога, «когда же готово»</p><div class="emo-bar"><div class="emo-fill" style="width:85%"></div></div></div>
+        <div class="j-step recover"><div class="jn">5</div><h5>Результат — Г1</h5><p>Статус-трекер, тон, динамика, медпрофиль, врач в один тап</p><div class="emo-bar"><div class="emo-fill" style="width:35%"></div></div></div>
+        <div class="j-step recover"><div class="jn">6</div><h5>Жизнь после — Г1</h5><p>Возврат в приложение, а не обрыв</p><div class="emo-bar"><div class="emo-fill" style="width:20%"></div></div></div>
+      </div>
+      <p class="final-note" style="margin-top:16px;">Зелёная зона (шаги 5–6) — Горизонт 1: здесь замыкаем цикл.</p>
+    </section>
+
+    <section id="priority">
+      <div class="step">Ставки · Приоритизация</div>
+      <h2>Во что вкладываемся: матрица направлений</h2>
+      <p class="lead">Шкала 1–5 по каждому критерию. Топ по сумме — рассрочка, подписка, семейный профиль, страхование.</p>
+      <div class="table-wrap">
+        <table class="prio-table">
+          <tr><th>Направление</th><th class="num">Частота</th><th class="num">Чек</th><th class="num">Синергия</th><th class="num">Ниша</th><th class="num">Итог</th></tr>
+          <tr><td>Рассрочка на медицину</td><td class="num">2</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="total">17</td></tr>
+          <tr><td>Чекапы по подписке</td><td class="num">3</td><td class="num">4</td><td class="num">4</td><td class="num">4</td><td class="total">15</td></tr>
+          <tr><td>Семейный профиль</td><td class="num">4</td><td class="num">3</td><td class="num">4</td><td class="num">4</td><td class="total">15</td></tr>
+          <tr><td>Страхование / ДМС</td><td class="num">2</td><td class="num">5</td><td class="num">5</td><td class="num">3</td><td class="total">15</td></tr>
+          <tr><td>Интерпретация результатов</td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td class="num">3</td><td class="total">13</td></tr>
+          <tr><td>Результат → врач</td><td class="num">3</td><td class="num">3</td><td class="num">3</td><td class="num">3</td><td class="total">12</td></tr>
+          <tr><td>Аптека / доставка</td><td class="num">5</td><td class="num">2</td><td class="num">3</td><td class="num">1</td><td class="total">11</td></tr>
+        </table>
+      </div>
+      <p class="final-note">Частота откалибруется на интервью, чек — на прайсах конкурентов и нашей аналитике.</p>
+    </section>
+
+    <section id="bank">
+      <div class="step">Банк гипотез · Как проверяем</div>
+      <h2>Что проверяем через AI-прототипы</h2>
+      <p class="lead">Гипотезы из интервью, отзывов и конкурентов. Каждую собираем кликабельным прототипом за часы и тестируем на респондентах: ship → learn → iterate.</p>
+      <div class="hyp-cols">
+        <div class="hyp-col">
+          <div class="htag">Замкнуть цикл · Г1</div>
+          <ul>
+            <li>Интерпретация + тон</li>
+            <li>Динамика показателей</li>
+            <li>Статус-трекер + пуш</li>
+            <li>Медпрофиль</li>
+            <li>Врач в один тап</li>
+          </ul>
+        </div>
+        <div class="hyp-col">
+          <div class="htag">Сила банка · Г2</div>
+          <ul>
+            <li>Рассрочка на медицину</li>
+            <li>Прозрачная цена</li>
+            <li>Страхование и ДМС</li>
+            <li>Медкопилка</li>
+            <li>Кешбэк как крючок</li>
+          </ul>
+        </div>
+        <div class="hyp-col">
+          <div class="htag">Сценарии жизни · Г3</div>
+          <ul>
+            <li>Семейный профиль</li>
+            <li>Гормоны по дням цикла</li>
+            <li>Чекапы по подписке</li>
+            <li>Расписание точки</li>
+            <li>Женское здоровье</li>
+          </ul>
+        </div>
+      </div>
+      <p class="final-note">Начинаем с самых подкреплённых: интерпретация результата и статус-трекер — их назвали и интервью, и отзывы.</p>
+    </section>
+
+    <section id="approach">
+      <div class="step">Подход · Главный принцип</div>
+      <h2>Сначала проверяем — потом строим</h2>
+      <p class="lead">Всё, что показано выше, — гипотезы, а не выводы. Два интервью дают направление, но не право строить. Прежде чем вкладывать ресурсы в любую фичу, её нужно проверить на большом числе пользователей.</p>
+      <div class="approach">
+        <div class="app-step">
+          <div class="an">01</div>
+          <h4>Больше голосов</h4>
+          <p>От 2 интервью — к 8–12 глубинным и десяткам голосовых. Только так паттерн отделяется от частного случая.</p>
+        </div>
+        <div class="app-step">
+          <div class="an">02</div>
+          <h4>Данные + слова</h4>
+          <p>Воронка покажет, где течёт. Интервью объяснят, почему. Ни цифры без контекста, ни мнения без цифр.</p>
+        </div>
+        <div class="app-step">
+          <div class="an">03</div>
+          <h4>Прототип до кода</h4>
+          <p>Каждую гипотезу — кликабельным прототипом на живых людях. Ошибиться за вечер дешевле, чем за квартал разработки.</p>
+        </div>
+      </div>
+      <p class="final-note" style="margin-top:20px;">Дисциплина исследования — это не задержка, а страховка от дорогой ошибки. Мы вкладываемся в то, что проверено, а не в то, что кажется.</p>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const links = document.querySelectorAll('#toc a');
+const sections = Array.from(links).map(l=>document.querySelector(l.getAttribute('href')));
+window.addEventListener('scroll', ()=>{
+  let idx = 0;
+  sections.forEach((s,i)=>{ if(s && s.getBoundingClientRect().top < 140) idx = i; });
+  links.forEach(l=>l.classList.remove('active'));
+  links[idx].classList.add('active');
+});
+</script>
+</body>
+</html>
