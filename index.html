@@ -100,11 +100,37 @@
     user-select: none;
   }
   .comment-toggle.active { background: #d6336c; }
+
+  .comment-list-toggle {
+    position: fixed; top: 20px; right: 260px; z-index: 2000;
+    background: #1a1a1a; color: #fff; padding: 10px 18px; border-radius: 999px;
+    cursor: pointer; font-size: 13px; font-weight: 600; box-shadow: 0 2px 10px rgba(0,0,0,.25);
+    user-select: none;
+  }
+  .comment-list-panel {
+    position: fixed; top: 70px; right: 20px; width: 320px; max-height: 70vh;
+    background: #fff; border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,.25);
+    z-index: 1999; overflow-y: auto; display: none; padding: 14px;
+  }
+  .comment-list-panel.open { display: block; }
+  .comment-list-item {
+    border-bottom: 1px solid #eee; padding: 10px 0; cursor: pointer; font-size: 12.5px;
+  }
+  .comment-list-item:last-child { border-bottom: none; }
+  .comment-list-item:hover { background: #f7f7f7; }
+  .comment-list-item .cl-num {
+    display: inline-flex; width: 18px; height: 18px; border-radius: 50%; background: #d6336c;
+    color: #fff; font-size: 10px; font-weight: 700; align-items: center; justify-content: center; margin-right: 6px;
+  }
+  .comment-list-item .cl-author { font-weight: 700; }
+  .comment-list-item .cl-text { margin-top: 3px; color: #333; }
+  .comment-list-empty { color: #999; font-style: italic; font-size: 12.5px; text-align: center; padding: 20px 0; }
   .pin-dot {
     position: absolute; width: 24px; height: 24px; border-radius: 50%;
     background: #d6336c; color: #fff; display: flex; align-items: center; justify-content: center;
     font-size: 12px; font-weight: 700; cursor: pointer; transform: translate(-50%, -50%);
     box-shadow: 0 1px 5px rgba(0,0,0,.35); z-index: 900; border: 2px solid #fff;
+    transition: transform .2s, box-shadow .2s;
   }
   .pin-popup {
     position: absolute; background: #fff; border: 1px solid #ddd; border-radius: 10px;
@@ -126,6 +152,11 @@
 <body>
 
 <div class="comment-toggle" id="commentToggle">💬 Комментарии: выкл</div>
+<div class="comment-list-toggle" id="commentListToggle">📋 Список (0)</div>
+<div class="comment-list-panel" id="commentListPanel">
+  <div style="font-weight:700; margin-bottom:8px;">Все комментарии</div>
+  <div id="commentListBody"></div>
+</div>
 <iframe name="hiddenPostFrame" style="display:none;"></iframe>
 
 <div class="layout" id="layout">
@@ -458,6 +489,11 @@
   let savedAuthor = localStorage.getItem('cjm_comment_author') || '';
 
   const toggleBtn = document.getElementById('commentToggle');
+  const listToggleBtn = document.getElementById('commentListToggle');
+  const listPanel = document.getElementById('commentListPanel');
+  listToggleBtn.addEventListener('click', function () {
+    listPanel.classList.toggle('open');
+  });
   toggleBtn.addEventListener('click', function () {
     commentMode = !commentMode;
     toggleBtn.textContent = commentMode ? '💬 Комментарии: вкл — кликните по холсту' : '💬 Комментарии: выкл';
@@ -594,6 +630,7 @@
   function renderPins(pins) {
     document.querySelectorAll('.pin-dot').forEach(function (p) { p.remove(); });
     const w = layoutEl.scrollWidth, h = layoutEl.scrollHeight;
+    const dots = [];
     pins.forEach(function (p, i) {
       const dot = document.createElement('div');
       dot.className = 'pin-dot';
@@ -605,7 +642,35 @@
         showPinInfo(dot, p);
       });
       layoutEl.appendChild(dot);
+      dots.push(dot);
     });
+
+    listToggleBtn.textContent = '📋 Список (' + pins.length + ')';
+    const listBody = document.getElementById('commentListBody');
+    if (pins.length === 0) {
+      listBody.innerHTML = '<div class="comment-list-empty">Пока нет комментариев</div>';
+    } else {
+      listBody.innerHTML = '';
+      pins.forEach(function (p, i) {
+        const item = document.createElement('div');
+        item.className = 'comment-list-item';
+        item.innerHTML =
+          '<span class="cl-num">' + (i + 1) + '</span>' +
+          '<span class="cl-author">' + escapeHtml(p.author) + '</span>' +
+          '<div class="cl-text">' + escapeHtml(p.text) + '</div>';
+        item.addEventListener('click', function () {
+          const dot = dots[i];
+          dot.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+          dot.style.transform = 'translate(-50%, -50%) scale(1.6)';
+          dot.style.boxShadow = '0 0 0 6px rgba(214,51,108,.35)';
+          setTimeout(function () {
+            dot.style.transform = 'translate(-50%, -50%) scale(1)';
+            dot.style.boxShadow = '';
+          }, 1200);
+        });
+        listBody.appendChild(item);
+      });
+    }
   }
 
   function showPinInfo(dot, p) {
