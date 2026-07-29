@@ -3,173 +3,390 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FAQ для запуска с Helix</title>
+<title>Методичка: подключение лаборатории-партнёра</title>
 <style>
   * { box-sizing: border-box; }
   body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #f4f6f5;
-    color: #1c2b22;
-    line-height: 1.6;
-    padding: 40px 16px;
+    background: #f5f7fa;
+    color: #1a2027;
+    padding: 32px 16px;
+    line-height: 1.55;
   }
-  .container {
-    max-width: 760px;
-    margin: 0 auto;
-  }
-  header {
-    margin-bottom: 32px;
-  }
+  .wrap { max-width: 960px; margin: 0 auto; }
   h1 {
-    font-size: 1.8rem;
-    margin: 0 0 8px;
-    color: #14532d;
+    font-size: 1.6rem;
+    color: #0f172a;
+    margin: 0 0 6px;
   }
-  .subtitle {
-    color: #5a6b60;
+  .intro {
+    color: #52606d;
     font-size: 0.95rem;
+    margin-bottom: 28px;
   }
   .section {
-    background: #ffffff;
-    border: 1px solid #e2e8e4;
-    border-radius: 12px;
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
     padding: 20px 24px;
-    margin-bottom: 16px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    margin-bottom: 20px;
   }
-  .section h2 {
+  h2 {
     font-size: 1.05rem;
+    color: #0f172a;
     margin: 0 0 12px;
-    color: #166534;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
-  .section h2 .num {
-    background: #dcfce7;
-    color: #166534;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
+  h3 {
+    font-size: 0.95rem;
+    color: #1e3a8a;
+    margin: 16px 0 8px;
+  }
+  .num {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #eef2ff;
+    color: #3730a3;
     font-size: 0.85rem;
+    font-weight: 700;
     flex-shrink: 0;
   }
-  ul {
-    margin: 0;
-    padding-left: 20px;
+  p { margin: 6px 0; font-size: 0.92rem; }
+  ul { margin: 6px 0; padding-left: 20px; }
+  li { margin-bottom: 4px; font-size: 0.92rem; }
+  .todo {
+    display: inline-block;
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 5px;
+    margin: 4px 0;
   }
-  li {
-    margin-bottom: 8px;
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li {
+    padding-left: 26px;
+    position: relative;
   }
-  li:last-child {
-    margin-bottom: 0;
+  .checklist li::before {
+    content: "☐";
+    position: absolute;
+    left: 0;
+    color: #64748b;
   }
-  footer {
-    text-align: center;
-    color: #9aa79f;
-    font-size: 0.8rem;
-    margin-top: 32px;
+  .diagram-wrap {
+    background: #fafafa;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
   }
 </style>
 </head>
 <body>
-<div class="container">
-  <header>
-    <h1>FAQ для запуска с Helix</h1>
-    <div class="subtitle">Флоу приложения — сдача лабораторных анализов</div>
-  </header>
+<div class="wrap">
+
+  <h1>Методичка: подключение лаборатории-партнёра</h1>
+  <p class="intro">Черновик на основе FAQ для встречи с Helix. Разделы с пометкой <span class="todo">требует уточнения</span> нужно дозаполнить после получения данных от разработки и юристов.</p>
 
   <div class="section">
-    <h2><span class="num">1</span> Согласия</h2>
+    <h2><span class="num">1</span> Общее описание модели интеграции</h2>
+    <p><b>Участники процесса:</b></p>
     <ul>
-      <li><strong>Общий посыл:</strong> процесс должен быть полностью оцифрован — пользователь в лабе или при визите бригады на дом ничего бумажного не заполняет и не подписывает. Оба согласия привязаны к каждому отдельному заказу, а не к пользователю.</li>
-      <li><strong>Согласие на ПДн:</strong> уже готово, трёхстороннее — платформа / партнёрская лаборатория / пользователь. Нужно, чтобы Helix его посмотрел и согласовал (в частности юристы).</li>
-      <li><strong>Согласие на инвазивное вмешательство:</strong> шаблон готов, привязан к заказу. Формат: пользователь на платформе даёт предсогласие на инвазивное вмешательство; при визите/выезде бригады на дом нужен статус «визита» (здесь важна роль QR как идентификации заказа) — как только статус визита подтверждён, предсогласие становится согласием. Юридически проработано с нашей стороны, вам нужно проверить и согласовать.</li>
+      <li><b>Платформа</b> — принимает заказ, ведёт пользователя, взаимодействует с лабораторией через API</li>
+      <li><b>Лаборатория-партнёр</b> — оказывает услугу (приём в медцентре или выезд на дом), обрабатывает биоматериал</li>
+      <li><b>Служба поддержки (СП)</b> — обрабатывает спорные кейсы, отмены вне стандартных правил</li>
+    </ul>
+    <p><b>Общий принцип:</b> процесс полностью оцифрован. Пользователь ничего не подписывает на бумаге — ни в лаборатории, ни при визите бригады на дом.</p>
+
+    <h3>Целевой пользовательский сценарий (CJM)</h3>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 1520 620" xmlns="http://www.w3.org/2000/svg" style="width:100%; height:auto; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+        <defs>
+          <marker id="cjmArrow" markerWidth="9" markerHeight="9" refX="7" refY="2.5" orient="auto" markerUnits="strokeWidth">
+            <path d="M0,0 L0,5 L8,2.5 z" fill="#334155"/>
+          </marker>
+        </defs>
+
+        <text x="760" y="28" text-anchor="middle" font-size="16" font-weight="700" fill="#0f172a">ЦЕЛЕВОЙ ПОЛЬЗОВАТЕЛЬСКИЙ СЦЕНАРИЙ</text>
+
+        <polygon points="20,45 560,45 585,72 560,99 20,99" fill="#dbeafe" stroke="#1e3a8a"/>
+        <text x="290" y="77" text-anchor="middle" font-size="13" font-weight="700" fill="#1e3a8a">1. Оформление заказа онлайн</text>
+
+        <polygon points="600,45 990,45 1015,72 990,99 600,99 625,72" fill="#dcfce7" stroke="#166534"/>
+        <text x="805" y="77" text-anchor="middle" font-size="13" font-weight="700" fill="#166534">2. Офлайн-визит в лабораторию</text>
+
+        <polygon points="1030,45 1490,45 1490,99 1030,99 1055,72" fill="#fef9c3" stroke="#a16207"/>
+        <text x="1265" y="77" text-anchor="middle" font-size="13" font-weight="700" fill="#713f12">3. Подтверждение визита и исполнение согласия</text>
+
+        <rect x="10" y="115" width="120" height="140" rx="8" fill="#eff6ff" stroke="#bfdbfe"/>
+        <text x="70" y="185" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">Пользователь</text>
+
+        <rect x="10" y="270" width="120" height="140" rx="8" fill="#eff6ff" stroke="#bfdbfe"/>
+        <text x="70" y="340" text-anchor="middle" font-size="12" font-weight="700" fill="#1e3a8a">Онлайн-платформа</text>
+
+        <rect x="10" y="425" width="120" height="170" rx="8" fill="#f5f3ff" stroke="#ddd6fe"/>
+        <text x="70" y="510" text-anchor="middle" font-size="12" font-weight="700" fill="#5b21b6">Партнёрская<tspan x="70" dy="16">лаборатория</tspan></text>
+
+        <rect x="145" y="120" width="150" height="60" rx="8" fill="#dbeafe" stroke="#1e3a8a"/>
+        <text x="220" y="145" text-anchor="middle" font-size="11" fill="#1e3a8a" font-weight="600">Оформляет и</text>
+        <text x="220" y="160" text-anchor="middle" font-size="11" fill="#1e3a8a" font-weight="600">оплачивает заказ</text>
+
+        <rect x="310" y="120" width="150" height="60" rx="8" fill="#dbeafe" stroke="#1e3a8a"/>
+        <text x="385" y="140" text-anchor="middle" font-size="11" fill="#1e3a8a" font-weight="600">Подписывает согласие</text>
+        <text x="385" y="153" text-anchor="middle" font-size="10" fill="#1e3a8a">на ПДн и предсогласие</text>
+        <text x="385" y="166" text-anchor="middle" font-size="10" fill="#1e3a8a">на инвазивное вмешательство</text>
+
+        <rect x="475" y="120" width="110" height="60" rx="8" fill="#dbeafe" stroke="#1e3a8a"/>
+        <text x="530" y="145" text-anchor="middle" font-size="11" fill="#1e3a8a" font-weight="600">Получает</text>
+        <text x="530" y="160" text-anchor="middle" font-size="11" fill="#1e3a8a" font-weight="600">QR-код</text>
+
+        <line x1="295" y1="150" x2="308" y2="150" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+        <line x1="460" y1="150" x2="473" y2="150" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+
+        <rect x="625" y="120" width="140" height="60" rx="8" fill="#dcfce7" stroke="#166534"/>
+        <text x="695" y="145" text-anchor="middle" font-size="11" fill="#14532d" font-weight="600">Приходит</text>
+        <text x="695" y="160" text-anchor="middle" font-size="11" fill="#14532d" font-weight="600">в лабораторию</text>
+        <line x1="585" y1="150" x2="623" y2="150" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+
+        <rect x="790" y="120" width="140" height="60" rx="8" fill="#dcfce7" stroke="#166534"/>
+        <text x="860" y="145" text-anchor="middle" font-size="11" fill="#14532d" font-weight="600">Предъявляет</text>
+        <text x="860" y="160" text-anchor="middle" font-size="11" fill="#14532d" font-weight="600">QR-код</text>
+        <line x1="765" y1="150" x2="788" y2="150" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+
+        <rect x="955" y="120" width="150" height="60" rx="8" fill="#dcfce7" stroke="#166534"/>
+        <text x="1030" y="140" text-anchor="middle" font-size="11" fill="#14532d" font-weight="600">Предъявляет документ,</text>
+        <text x="1030" y="155" text-anchor="middle" font-size="10" fill="#14532d">удостоверяющий личность</text>
+        <line x1="930" y1="150" x2="953" y2="150" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+
+        <rect x="145" y="275" width="150" height="60" rx="8" fill="#f0fdf4" stroke="#86efac"/>
+        <text x="220" y="300" text-anchor="middle" font-size="11" fill="#166534" font-weight="600">Создаёт</text>
+        <text x="220" y="315" text-anchor="middle" font-size="11" fill="#166534" font-weight="600">заказ (ID заказа)</text>
+
+        <rect x="310" y="275" width="150" height="60" rx="8" fill="#f0fdf4" stroke="#86efac"/>
+        <text x="385" y="295" text-anchor="middle" font-size="10" fill="#166534" font-weight="600">Сохраняет согласие</text>
+        <text x="385" y="308" text-anchor="middle" font-size="10" fill="#166534" font-weight="600">на ПДн и предсогласие</text>
+        <text x="385" y="321" text-anchor="middle" font-size="10" fill="#166534" font-weight="600">на инвазивное вмешательство</text>
+
+        <rect x="475" y="275" width="110" height="60" rx="8" fill="#f0fdf4" stroke="#86efac"/>
+        <text x="530" y="300" text-anchor="middle" font-size="11" fill="#166534" font-weight="600">Генерирует</text>
+        <text x="530" y="315" text-anchor="middle" font-size="11" fill="#166534" font-weight="600">QR-код визита</text>
+
+        <line x1="220" y1="180" x2="220" y2="273" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+        <line x1="385" y1="180" x2="385" y2="273" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)" stroke-dasharray="4 3"/>
+        <line x1="295" y1="305" x2="308" y2="305" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+        <line x1="460" y1="305" x2="473" y2="305" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+        <line x1="530" y1="275" x2="530" y2="182" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)" stroke-dasharray="4 3"/>
+
+        <rect x="625" y="275" width="380" height="60" rx="8" fill="#f0fdf4" stroke="#86efac"/>
+        <text x="815" y="300" text-anchor="middle" font-size="11" fill="#166534" font-weight="600">Передаёт в лабораторию: заказ, согласия,</text>
+        <text x="815" y="315" text-anchor="middle" font-size="11" fill="#166534" font-weight="600">данные пациента, QR-код визита</text>
+
+        <rect x="625" y="430" width="150" height="60" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/>
+        <text x="700" y="450" text-anchor="middle" font-size="10" fill="#5b21b6" font-weight="600">Сканирует QR-код</text>
+        <text x="700" y="465" text-anchor="middle" font-size="10" fill="#5b21b6" font-weight="600">визита</text>
+
+        <rect x="795" y="430" width="150" height="60" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/>
+        <text x="870" y="450" text-anchor="middle" font-size="10" fill="#5b21b6" font-weight="600">Проверяет личность</text>
+        <text x="870" y="465" text-anchor="middle" font-size="10" fill="#5b21b6" font-weight="600">(документ / ИИН)</text>
+
+        <rect x="965" y="430" width="150" height="60" rx="8" fill="#f5f3ff" stroke="#c4b5fd"/>
+        <text x="1040" y="450" text-anchor="middle" font-size="10" fill="#5b21b6" font-weight="600">Фиксирует</text>
+        <text x="1040" y="465" text-anchor="middle" font-size="10" fill="#5b21b6" font-weight="600">визит</text>
+
+        <line x1="700" y1="335" x2="700" y2="428" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+        <line x1="775" y1="460" x2="793" y2="460" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+        <line x1="945" y1="460" x2="963" y2="460" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+        <line x1="1030" y1="145" x2="1030" y2="428" stroke="#334155" stroke-width="2" stroke-dasharray="3 3"/>
+        <line x1="1030" y1="428" x2="770" y2="428" stroke="#334155" stroke-width="2" stroke-dasharray="3 3"/>
+
+        <rect x="1180" y="270" width="260" height="60" rx="8" fill="#fef3c7" stroke="#d97706"/>
+        <text x="1310" y="292" text-anchor="middle" font-size="11" fill="#78350f" font-weight="700">Получает подтверждение</text>
+        <text x="1310" y="307" text-anchor="middle" font-size="10" fill="#78350f">факта визита от лаборатории</text>
+
+        <line x1="1150" y1="460" x2="1150" y2="300" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+        <line x1="1115" y1="460" x2="1150" y2="460" stroke="#334155" stroke-width="2"/>
+
+        <rect x="1180" y="345" width="260" height="60" rx="8" fill="#fef3c7" stroke="#d97706"/>
+        <text x="1310" y="367" text-anchor="middle" font-size="11" fill="#78350f" font-weight="700">Фиксирует исполнение</text>
+        <text x="1310" y="382" text-anchor="middle" font-size="10" fill="#78350f">предсогласия (авто → согласие)</text>
+        <line x1="1310" y1="330" x2="1310" y2="343" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+
+        <rect x="1180" y="420" width="260" height="60" rx="8" fill="#fef3c7" stroke="#d97706"/>
+        <text x="1310" y="442" text-anchor="middle" font-size="11" fill="#78350f" font-weight="700">Заказ → стандартный</text>
+        <text x="1310" y="457" text-anchor="middle" font-size="10" fill="#78350f">производственный процесс</text>
+        <line x1="1310" y1="405" x2="1310" y2="418" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+
+        <rect x="10" y="605" width="18" height="12" fill="#dbeafe" stroke="#1e3a8a"/>
+        <text x="34" y="615" font-size="10" fill="#334155">Пользователь</text>
+        <rect x="140" y="605" width="18" height="12" fill="#dcfce7" stroke="#166534"/>
+        <text x="164" y="615" font-size="10" fill="#334155">Онлайн-платформа</text>
+        <rect x="300" y="605" width="18" height="12" fill="#f5f3ff" stroke="#c4b5fd"/>
+        <text x="324" y="615" font-size="10" fill="#334155">Партнёрская лаборатория</text>
+        <rect x="510" y="605" width="18" height="12" fill="#fef3c7" stroke="#d97706"/>
+        <text x="534" y="615" font-size="10" fill="#334155">Исполнение согласия</text>
+        <line x1="670" y1="611" x2="700" y2="611" stroke="#334155" stroke-width="2" marker-end="url(#cjmArrow)"/>
+        <text x="708" y="615" font-size="10" fill="#334155">Основной поток</text>
+        <line x1="850" y1="611" x2="880" y2="611" stroke="#334155" stroke-width="2" stroke-dasharray="4 3"/>
+        <text x="888" y="615" font-size="10" fill="#334155">Передача данных</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2><span class="num">2</span> Юридический блок: согласия</h2>
+
+    <h3>2.1 Согласие на обработку персональных данных (ПДн)</h3>
+    <ul>
+      <li>Трёхстороннее: платформа / лаборатория-партнёр / пользователь</li>
+      <li>Готово, привязано к заказу (не к пользователю)</li>
+      <li>Проверка и согласование юристами лаборатории-партнёра</li>
+    </ul>
+
+    <h3>2.2 Согласие на инвазивное вмешательство</h3>
+    <ul>
+      <li>Шаблон готов, привязан к заказу</li>
+      <li>Флоу: пользователь даёт <b>предсогласие</b> онлайн при оформлении → подтверждение визита (через QR) переводит статус в <b>согласие</b> автоматически</li>
+      <li>Итоговая формулировка текста согласия, сроки хранения, требования по архивации — у юристов лаборатории</li>
+    </ul>
+
+    <h3>2.3 Почему нужен статус «Визит подтверждён»</h3>
+    <p>Это не техническая формальность, а часть юридической модели:</p>
+    <ul>
+      <li>Связывает онлайн-заказ с офлайн-визитом</li>
+      <li>Переводит предсогласие в согласие</li>
+      <li>Является основанием для передачи заказа в производственный процесс лаборатории</li>
+    </ul>
+    <p>Итоговые формулировки в юридическом заключении: что именно фиксируется как момент оказания услуги, кто хранит доказательство визита (лаборатория / платформа / оба) — у юристов.</p>
+  </div>
+
+  <div class="section">
+    <h2><span class="num">3</span> Техническая интеграция</h2>
+    <p><i>Раздел нужно дополнить силами разработки — ниже базовые вопросы, на которые нужны ответы и технические спецификации.</i></p>
+
+    <h3>3.1 QR-код</h3>
+    <ul>
+      <li>Один QR-код = один заказ (одноразовое использование)</li>
+      <li>Связывает онлайн-заказ с офлайн-визитом</li>
+    </ul>
+    <p><span class="todo">требует уточнения от разработки</span></p>
+    <ul>
+      <li>Кто генерирует QR — платформа или лаборатория?</li>
+      <li>Кто сканирует — сотрудник лаборатории или клиент показывает сам?</li>
+      <li>Готова ли техническая интеграция QR-флоу на стороне лаборатории?</li>
+    </ul>
+
+    <h3>3.2 Вебхуки (subscription)</h3>
+    <p><span class="todo">требует уточнения от разработки</span></p>
+    <ul>
+      <li>Сколько ретраев при неуспешной доставке (наш endpoint вернул ошибку/не ответил)?</li>
+      <li>Хранятся ли логи доставок на случай аудита пропавших событий?</li>
+      <li>Жизненный цикл подписки — нужно ли периодически пересоздавать?</li>
+    </ul>
+
+    <h3>3.3 Регионы (КЗ vs РФ / ФИАС)</h3>
+    <ul>
+      <li>Критичный блокер: на тестовом контракте нельзя создать вызов на дом даже с российскими регионами</li>
+      <li>У казахстанских городов нет кода ФИАС — текущая логика маршрутизации на нём завязана</li>
+    </ul>
+    <p><span class="todo">требует уточнения от разработки</span> — как будет решаться маршрутизация для регионов КЗ в проде</p>
+
+    <h3>3.4 Код контрагента</h3>
+    <ul>
+      <li>На staging локации и окна записи получаем через код контрагента</li>
+      <li>Обсуждалось (устно, не задокументировано), что в проде контрагентов не будет</li>
+    </ul>
+    <p><span class="todo">требует уточнения от разработки</span> — как получать локации и слоты без кода контрагента</p>
+
+    <h3>3.5 Общие технические ограничения</h3>
+    <p><span class="todo">требует уточнения от разработки</span></p>
+    <ul>
+      <li>Ограничения по API/интеграции (форматы данных, лимиты, доступность)</li>
+      <li>Технический контакт со стороны лаборатории</li>
+      <li>Сроки готовности к интеграции, нужен ли пилот на ограниченном числе точек</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2><span class="num">2</span> QR-код</h2>
+    <h2><span class="num">4</span> Операционный флоу</h2>
+
+    <h3>4.1 Слоты по выезду</h3>
+    <p><span class="todo">требует уточнения от лаборатории</span></p>
     <ul>
-      <li>Как у вас устроена идентификация клиента по QR — генерируете свой или можете принимать наш?</li>
-      <li>Кто отвечает за сканирование: сотрудник лаборатории на месте или клиент показывает QR сам?</li>
-      <li>Есть ли у вас уже готовая техническая интеграция QR-флоу с другими партнёрами, которую можно использовать как референс?</li>
+      <li>Как формируются слоты — есть ли отдельная система бронирования?</li>
+      <li>Привязка к конкретному филиалу или другая логика?</li>
+      <li>Синхронизация в реальном времени?</li>
+    </ul>
+
+    <h3>4.2 Отмены и возвраты</h3>
+    <ul>
+      <li>Взаиморасчёт между платформой и лабораторией — 1–2 раза в месяц</li>
+      <li>Возвраты пользователю проходят через платформу</li>
+      <li>Возврат через лабораторию возможен только в случае спорного кейса, где пользователь жалуется на уже оказанную услугу</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2><span class="num">3</span> Слоты по выезду</h2>
+    <h2><span class="num">5</span> Домашний выезд — детальный флоу</h2>
+
+    <h3>5.1 Формирование временных слотов</h3>
+    <p>На этапе оформления заказа пользователю отображается перечень доступных интервалов.</p>
+    <p><span class="todo">требует уточнения от разработки</span> — механизм передачи слотов: API, периодическая синхронизация, вручную, иное.</p>
+
+    <h3>5.2 Формат временных интервалов</h3>
+    <p><span class="todo">требует уточнения</span> — продолжительность интервалов (30 мин / 1 час / 2 часа), фиксированные или динамические, различия по регионам.</p>
+
+    <h3>5.3 Доступность ближайших слотов</h3>
+    <p><span class="todo">требует уточнения</span> — минимальное время между оформлением заказа и первым доступным выездом, возможность заказа «день в день».</p>
+
+    <h3>5.4 Перенос временного слота</h3>
+    <p><span class="todo">требует уточнения</span> — правила и ограничения переноса даты/времени, сроки.</p>
+
+    <h3>5.5 Отмена домашнего выезда</h3>
+    <p><span class="todo">требует уточнения</span> — минимальное время до выезда для отмены без последствий, отличаются ли правила отмены от правил переноса.</p>
+
+    <h3>5.6 Поздняя отмена / перенос / неявка</h3>
+    <p><span class="todo">требует уточнения</span> — порядок действий, стоимость для пользователя, необходимость оформления нового заказа.</p>
+
+    <h3>5.7 Передача изменений в iDoctor</h3>
+    <p>Нужно подтверждение возможности передачи по интеграции статусов:</p>
     <ul>
-      <li>Как формируются слоты для визита/выезда — есть отдельная система бронирования?</li>
-      <li>Какая механика предпочтительна с вашей стороны — например, привязка к конкретному филиалу или другая логика?</li>
-      <li>Нужна ли синхронизация слотов в реальном времени или можно с задержкой?</li>
+      <li>подтверждение бронирования слота</li>
+      <li>перенос</li>
+      <li>отмена</li>
+      <li>начало визита</li>
+      <li>завершение визита</li>
     </ul>
+    <p><span class="todo">требует уточнения от разработки</span> — технический формат передачи (webhook / API / иное).</p>
   </div>
 
   <div class="section">
-    <h2><span class="num">4</span> Отмены и возвраты</h2>
-    <ul>
-      <li>Какие правила отмены записи — сроки, штрафы, лимиты?</li>
-      <li>Как оформляется возврат денег при отмене — через вас, через нас, или это ручной процесс?</li>
+    <h2><span class="num">6</span> Чек-лист подключения новой лаборатории-партнёра</h2>
+    <p>Пошаговый список для использования при подключении следующих партнёров:</p>
+    <ul class="checklist">
+      <li>Согласовать юридическую модель согласий (ПДн + инвазивное вмешательство) с юристами лаборатории</li>
+      <li>Определить генератора QR-кода и точку сканирования</li>
+      <li>Согласовать техническую спецификацию вебхуков (ретраи, логи, жизненный цикл подписки)</li>
+      <li>Решить вопрос маршрутизации регионов (если лаборатория работает не только в РФ)</li>
+      <li>Согласовать механизм получения локаций/слотов без кода контрагента (или определить финальную модель контрагентов)</li>
+      <li>Определить механизм формирования и синхронизации слотов на выезд</li>
+      <li>Согласовать правила отмен, переносов и модель возврата денег</li>
+      <li>Согласовать формат передачи статусов визита в iDoctor</li>
+      <li>Провести пилот на ограниченном числе точек перед полным запуском</li>
+      <li>Финальная юридическая проверка всех формулировок согласий и правил возврата</li>
     </ul>
   </div>
 
-  <div class="section">
-    <h2><span class="num">5</span> Технические блокеры (опыт с Акарысом)</h2>
-    <ul>
-      <li>Какие у вас технические ограничения по API/интеграции (форматы данных, лимиты, доступность)?</li>
-      <li>Кто с вашей стороны технический контакт для решения интеграционных вопросов?</li>
-      <li>Были ли у вас похожие интеграции с другими сервисами — какие грабли уже знаете?</li>
-    </ul>
-  </div>
+  <p class="intro"><i>Документ — черновик. Разделы 3 (техническая интеграция) и 2/6 (юридические формулировки) нужно дозаполнить силами разработки и юристов соответственно, после чего документ можно использовать как типовую методичку для подключения новых лабораторий-партнёров.</i></p>
 
-  <div class="section">
-    <h2><span class="num">6</span> Общее по запуску</h2>
-    <ul>
-      <li>Какие сроки готовности с вашей стороны?</li>
-      <li>Нужен ли пилот на ограниченном числе точек перед полным запуском?</li>
-      <li>Кто отвечает за поддержку клиентов в случае проблем на месте?</li>
-    </ul>
-  </div>
-
-  <div class="section" style="border-color:#fecaca; background:#fff5f5;">
-    <h2 style="color:#b91c1c;"><span class="num" style="background:#fee2e2; color:#b91c1c;">!</span> Критичные технические вопросы</h2>
-  </div>
-
-  <div class="section">
-    <h2><span class="num">A</span> Регионы (КЗ vs РФ / ФИАС)</h2>
-    <ul>
-      <li><strong>Критичный момент:</strong> на тестовом контракте не можем создать вызов на дом даже с российскими регионами.</li>
-      <li><strong>Ещё критичнее:</strong> нужно завести регионы Казахстана. Сейчас все регионы российские и завязаны на код ФИАС, а у казахстанских городов кода ФИАС нет.</li>
-      <li>Из-за этого непонятно, как в проде будет работать маршрутизация на мобильную бригаду (вызов на дом) по нашим регионам — соответственно нельзя считать этот флоу готовым к проду.</li>
-      <li><em>Почему критично:</em> staging полностью адаптирован под РФ (города, ФИАС, контракты). Наша цель — убедиться, что вызов на дом будет работать по регионам КЗ.</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2><span class="num">B</span> Вебхук (subscription)</h2>
-    <ul>
-      <li>Сколько ретраев вы делаете на своей стороне, если доставка к нам завершилась неуспешно (наш endpoint вернул ошибку или не ответил)?</li>
-      <li>Храните ли вы логи доставок на своей стороне на случай, если понадобится аудит пропавших событий?</li>
-      <li>Какой у подписки жизненный цикл? Нужно ли периодически её обновлять (пересоздавать), чтобы быть уверенными, что доставка продолжает работать исправно?</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2><span class="num">C</span> Код контрагента</h2>
-    <ul>
-      <li>На staging локации и окна записи мы получаем через код контрагента.</li>
-      <li>На одной из встреч обсуждалось, что в проде контрагентов не будет вообще, но решение нигде не задокументировано и участник(-ца) на той встрече не присутствовал(-а).</li>
-      <li><strong>Нужно:</strong> объяснить ещё раз, как в проде всё будет работать без кода контрагента — как мы будем получать локации и окна записи?</li>
-      <li><em>Статус: требует дополнительного обсуждения.</em></li>
-    </ul>
-  </div>
-
-  <footer>Подготовлено для встречи с Helix</footer>
 </div>
 </body>
 </html>
